@@ -5,47 +5,35 @@
     <span class="forum">&gt;</span>
     <span class="forum">Profile</span>
   </div>
+  <div class="p-body-header">
+    <div class="p-title">
+      <h1 class="p-title-value">Account detail</h1>
+    </div>
+  </div>
   <div class="profile-content">
     <div class="profile-info">
-      <div class="profile-info-container">
-        <h3 class="username">Profile</h3>
-        <div class="avatar-container">
-          <label class="label">
-            <input
-              class="hidden"
-              type="file"
-              name="myFile"
-              @change="uploadFile"
-            />
-            <figure class="avatar-figure">
-              <img :src="user.avatar" class="avatar-image" alt="avatar" />
-              <figcaption class="avatar-caption">
-                <img
-                  class="camera-icon"
-                  src="https://raw.githubusercontent.com/ThiagoLuizNunes/angular-boilerplate/master/src/assets/imgs/camera-white.png"
-                  alt=""
-                />
-              </figcaption>
-            </figure>
-          </label>
+      <div class="block-container">
+        <h3 class="block-header">Your account</h3>
+        <div class="block-body">
+          <div class="block-link">
+            <button @click="handleShowProfile">Your profile</button>
+            <button @click="handleShowAlert">Alert</button>
+            <button @click="handleShowSetting">Setting</button>
+          </div>
         </div>
-        <h3 class="username">{{ user.username }}</h3>
-        <p>{{ user.email }}</p>
-        <p>{{ user.gender }}</p>
-        <p>{{ user.phone }}</p>
-        <p class="join-date">
-          Joined: <span>{{ user.createAt }}</span>
-        </p>
-        <button @click="setToggleEditProfile(true)" class="edit-button">
-          Edit Information
-        </button>
       </div>
     </div>
-    <div class="posts">
-      <button @click="setToggleCreatePost(true)" class="create-post-button">
-        Create New Post
-      </button>
-      <h3 class="posts-list-title">All Posts List</h3>
+    <div class="p-body-content">
+      <div class="p-body-page-content">
+        <div v-if="showProfile">
+          <dl class="form-row" v-if="user">
+            <label>Username:</label>
+            {{ user.username }}
+          </dl>
+        </div>
+        <div v-if="showAlert">Show alert</div>
+        <div v-if="showSetting">Show setting</div>
+      </div>
     </div>
   </div>
   <ProfileForm
@@ -68,6 +56,9 @@ export default {
   data() {
     return {
       user: {},
+      showProfile: false,
+      showAlert: false,
+      showSetting: false,
     };
   },
 
@@ -97,7 +88,17 @@ export default {
           year: "numeric",
         });
         this.user.createAt = formattedDate;
+        console.log(this.user);
       });
+    },
+    handleShowProfile() {
+      this.showProfile = true;
+    },
+    handleShowAlert() {
+      this.showAlert = true;
+    },
+    handleShowSetting() {
+      this.showSetting = true;
     },
   },
 };
@@ -105,14 +106,6 @@ export default {
 
 <style scoped>
 .container {
-  /* display: flex;
-  align-items: center;
-  height: 33px;
-  background-color: #343a40;
-  font-size: 15px;
-  color: #23497c;
-  padding-left: 16px;
-  padding-right: 16px; */
   position: fixed;
   top: 0;
   left: 0;
@@ -315,6 +308,26 @@ export default {
   padding-top: 6px;
   padding-bottom: 6px;
 }
+.block-container {
+  color: #15191d;
+  background: #ebeced;
+  border-top-color: #cbcdd0;
+  border-right-color: #c3c6c9;
+  border-bottom-color: #b5b9bd;
+  border-left-color: #c3c6c9;
+  border-radius: 4px;
+}
+
+.block-header {
+  padding: 6px 10px;
+  margin: 0;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 1.25rem;
+  color: #ebeced;
+  background: #5c7099;
+  border-bottom: 1px solid #cbcdd0;
+}
 
 .join-date span {
   font-weight: bold;
@@ -322,6 +335,101 @@ export default {
 
 .forum {
   color: #e2e3e5;
+}
+
+.block-link button {
+  display: block;
+  padding: 6px 10px;
+  text-decoration: none;
+  cursor: pointer;
+  color: #23497c;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+.p-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 100%;
+  margin-bottom: -5px;
+  background-color: #343a40;
+}
+
+.p-title-value {
+  padding: 0;
+  margin: 0 0 5px 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+  min-width: 0;
+  margin-right: auto;
+  margin-left: 1rem;
+}
+.p-body-header .p-title .p-title-value {
+  color: #ebeced;
+  background-color: #343a40;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.p-body-content {
+  padding-left: 10px;
+  display: table-cell;
+  vertical-align: top;
+  box-sizing: border-box;
+  flex: 3;
+  margin-top: 4px;
+  background: #ebeced;
+}
+
+.p-body-pageContent > .tabs--standalone:first-child {
+  margin-bottom: 10px;
+}
+
+.formRow {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+dl {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+.formRow > dd {
+  width: 67%;
+  padding: 15px 10px 15px 10px;
+}
+
+.formRow > dt {
+  border-right: 1px solid transparent;
+  background: #e2e3e5;
+  border-color: #cbcdd0;
+  text-align: right;
+  width: 33%;
+  padding: 15px 10px 15px 10px;
+}
+
+.formRow > dd {
+  width: 67%;
+  padding: 15px 10px 15px 10px;
+}
+.label-form {
+  position: absolute;
+  transform: translateY(50%);
+  user-select: none;
+  color: black;
+  pointer-events: none;
+  margin-right: 10%;
 }
 
 @media (max-width: 600px) {

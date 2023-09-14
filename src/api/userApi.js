@@ -6,3 +6,12 @@ export const getUserInfo = () => {
     method: "get",
   });
 };
+
+export const register = (data) => {
+  console.log(data);
+  return request({
+    url: "/auth/register",
+    method: "post",
+    data: data,
+  });
+};
