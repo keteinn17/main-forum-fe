@@ -63,7 +63,7 @@ export default {
   components: {},
   computed: {
     currentUser() {
-      console.log(this.$store.state.auth.user);
+      // console.log(this.$store.state.auth.user);
       return this.$store.state.auth.user;
     },
   },

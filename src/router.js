@@ -2,8 +2,13 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import Login from "./components/Login.vue";
 import Profile from "./components/Profile.vue";
-
+import Register from "./components/Register";
+import Home from "./components/Home";
 const routes = [
+  {
+    path: "/",
+    component: Home,
+  },
   {
     path: "/login",
     component: Login,
@@ -13,6 +18,11 @@ const routes = [
     name: "profile",
     // lazy-loaded
     component: Profile,
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
   },
 ];
 
