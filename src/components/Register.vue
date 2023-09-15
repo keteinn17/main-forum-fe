@@ -200,6 +200,7 @@ export default {
           await register(this.user).then((res) => {
             console.log(res);
           });
+          this.loading = false;
 
           console.log("Success send request");
         } catch (e) {
@@ -227,7 +228,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+/* .container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,7 +238,7 @@ export default {
   left: 0;
   bottom: 0;
   z-index: 10;
-}
+} */
 
 .form-input {
   padding: 20px;
@@ -277,6 +278,8 @@ export default {
   padding: 10px;
   border-radius: 10px;
   animation: fadeIn 0.3s;
+  margin-left: 20rem;
+  margin-top: 10rem;
 }
 
 .title {

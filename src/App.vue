@@ -51,7 +51,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="navbar-nav ml-auto">
       <router-view />
     </div>
   </div>
@@ -88,6 +88,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  overflow: scroll;
+}
+.container {
+  height: 90%;
+  width: 100%;
 }
 </style>

@@ -66,6 +66,7 @@
 <script>
 import { Form } from "vee-validate";
 import * as yup from "yup";
+import axios from "axios";
 
 export default {
   name: "LoginVue",
@@ -85,6 +86,7 @@ export default {
       schema,
       email: "",
       password: "",
+      isLoginGg: false,
     };
   },
   computed: {
@@ -116,6 +118,19 @@ export default {
             error.toString();
         }
       );
+    },
+    async handleGoogleLogin() {
+      axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+      try {
+        this.loadingGg = true;
+        console.log("Starting login by gg");
+        const googleUser = await this.$gAuth.signIn();
+        console.log("googleUser", googleUser);
+        this.loadingGg = false;
+      } catch (error) {
+        this.loadingGg = false;
+        console.log(error.message);
+      }
     },
   },
 };

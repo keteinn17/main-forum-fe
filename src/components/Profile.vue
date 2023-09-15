@@ -1,6 +1,6 @@
 <template>
   <div class="container-header">My profile</div>
-  <div class="profile-content">
+  <div class="profile-content-header">
     <router-link to="/" class="forum">Forums</router-link>
     <span class="forum">&gt;</span>
     <span class="forum">Profile</span>
@@ -16,24 +16,69 @@
         <h3 class="block-header">Your account</h3>
         <div class="block-body">
           <div class="block-link">
-            <button @click="handleShowProfile">Your profile</button>
-            <button @click="handleShowAlert">Alert</button>
-            <button @click="handleShowSetting">Setting</button>
+            <button style="border: none" @click="handleShowProfile">
+              Your profile
+            </button>
+            <button style="border: none" @click="handleShowAlert">Alert</button>
+            <button style="border: none" @click="handleShowSetting">
+              Setting
+            </button>
           </div>
         </div>
       </div>
     </div>
     <div class="p-body-content">
-      <div class="p-body-page-content">
-        <div v-if="showProfile">
-          <dl class="form-row" v-if="user">
-            <label>Username:</label>
-            {{ user.username }}
-          </dl>
-        </div>
-        <div v-if="showAlert">Show alert</div>
-        <div v-if="showSetting">Show setting</div>
+      <div v-if="showProfile">
+        <table v-if="user">
+          <tbody>
+            <tr>
+              <td class="col1">Username:</td>
+              <td class="col2">{{ user.username }}</td>
+            </tr>
+            <tr>
+              <td class="col1">Email:</td>
+              <td class="col2">{{ user.email }}</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+            <tr>
+              <td class="col1">Col1</td>
+              <td class="col2">Col2</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <div v-else-if="showSetting" class="show-setting">Show setting</div>
     </div>
   </div>
   <ProfileForm
@@ -98,6 +143,7 @@ export default {
       this.showAlert = true;
     },
     handleShowSetting() {
+      this.showProfile = false;
       this.showSetting = true;
     },
   },
@@ -105,20 +151,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  background-color: #343a40;
-  font-size: 15px;
-  color: #23497c;
-  padding-left: 16px;
-  padding-right: 16px;
-}
 .container-header {
   display: flex;
   align-items: center;
@@ -151,10 +183,22 @@ export default {
   padding-bottom: 24px;
   gap: 16px;
   background-color: #343a40;
+  height: auto;
+}
+.profile-content-header {
+  display: flex;
+  padding-left: 16px;
+  padding-right: 34.5px;
+  padding-top: 10px;
+  padding-bottom: 24px;
+  gap: 16px;
+  background-color: #343a40;
+  width: 100%;
 }
 
 .profile-info {
   flex: 1;
+  margin-left: 15rem;
 }
 
 .profile-info-container {
@@ -335,6 +379,8 @@ export default {
 
 .forum {
   color: #e2e3e5;
+  margin-left: 15rem;
+  margin-right: -15rem;
 }
 
 .block-link button {
@@ -345,7 +391,7 @@ export default {
   color: #23497c;
   text-decoration: none;
   background-color: transparent;
-  -webkit-text-decoration-skip: objects;
+  border-color: #c3c6c9;
 }
 
 .p-title {
@@ -361,10 +407,10 @@ export default {
   padding: 0;
   margin: 0 0 5px 0;
   font-size: 1.5rem;
-  font-weight: 400;
+  font-weight: 350;
   min-width: 0;
   margin-right: auto;
-  margin-left: 1rem;
+  margin-left: 15rem;
 }
 .p-body-header .p-title .p-title-value {
   color: #ebeced;
@@ -383,7 +429,28 @@ export default {
   flex: 3;
   margin-top: 4px;
   background: #ebeced;
+  box-sizing: border-box;
+  margin-right: 15rem;
+  margin-left: 2rem;
 }
+.p-body-content[data-v-bf1681ae] {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  background: #ebeced;
+  position: relative; /* Add position relative */
+}
+
+/* .p-body-content[data-v-bf1681ae]:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 30%;
+  width: 1px;
+  background: #000;  Set the color of the line 
+} */
 
 .p-body-pageContent > .tabs--standalone:first-child {
   margin-bottom: 10px;
@@ -430,6 +497,50 @@ dl {
   color: black;
   pointer-events: none;
   margin-right: 10%;
+}
+
+.p-body-page-content {
+  display: flex;
+  justify-content: space-between;
+  height: 30%;
+  max-height: fit-content;
+  /* margin-top: 10%; */
+}
+
+.row-content {
+  height: 10%;
+  /* display: flex; */
+  margin-bottom: 1rem;
+}
+
+.column-1 {
+  width: 30%;
+}
+.column-2 {
+}
+
+.p-body-content-title {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+.col1 {
+  width: 14rem;
+}
+.col2 {
+  width: 21rem;
+  border-left: 1px solid #23497c;
+}
+/* td {
+  padding: 10px;
+  text-align: center;
+  border-left: 1px solid #000;
+} */
+
+td.col1 {
+  height: 5px;
+}
+td.col2 {
+  height: 5rem;
 }
 
 @media (max-width: 600px) {

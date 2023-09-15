@@ -6324,6 +6324,11 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
+"vue-google-oauth2@^1.5.10":
+  "integrity" "sha512-0+ZGbauhkBhvTln2RPyeaSvRdrka194h+MeEQngy1H4UvGOC5hxRMB8QvUrVRP/w2Tt8/ByCqGDko6MuHpFpbQ=="
+  "resolved" "https://registry.npmjs.org/vue-google-oauth2/-/vue-google-oauth2-1.5.10.tgz"
+  "version" "1.5.10"
+
 "vue-hot-reload-api@^2.3.0":
   "integrity" "sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog=="
   "resolved" "https://registry.npmmirror.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
@@ -6368,6 +6373,11 @@
     "@vue/runtime-dom" "3.3.4"
     "@vue/server-renderer" "3.3.4"
     "@vue/shared" "3.3.4"
+
+"vue3-google-oauth2@^1.0.7":
+  "integrity" "sha512-XZv5+IVRLqKrsfm6DamD75e4LPynDt3xpmEw3SQBKfnUvpaIq6YuimOCPoXMfedR6nQHJeZkw62E/ii2disppA=="
+  "resolved" "https://registry.npmjs.org/vue3-google-oauth2/-/vue3-google-oauth2-1.0.7.tgz"
+  "version" "1.0.7"
 
 "vuex@^4.1.0":
   "integrity" "sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ=="
