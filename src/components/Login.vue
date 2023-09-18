@@ -52,6 +52,11 @@
           <i class="fab fa-google"></i>
           <span>Login with Google</span>
         </button>
+        <!-- <div>
+          <GoogleLogin :callback="callback" prompt auto-login>
+            <button>Add</button>
+          </GoogleLogin>
+        </div> -->
 
         <div>
           <div v-if="message" class="alert alert-danger" role="alert">
@@ -66,7 +71,6 @@
 <script>
 import { Form } from "vee-validate";
 import * as yup from "yup";
-import axios from "axios";
 
 export default {
   name: "LoginVue",
@@ -87,6 +91,11 @@ export default {
       email: "",
       password: "",
       isLoginGg: false,
+      callback: (response) => {
+        console.log("Login");
+        console.log(response);
+        this.$router.push("/profile");
+      },
     };
   },
   computed: {
@@ -106,7 +115,8 @@ export default {
       user.password = this.password;
       this.$store.dispatch("auth/login", user).then(
         () => {
-          this.$router.push("/profile");
+          this.loadingJWT = false;
+          this.$router.push("/");
         },
         (error) => {
           this.loading = false;
@@ -120,12 +130,10 @@ export default {
       );
     },
     async handleGoogleLogin() {
-      axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
       try {
         this.loadingGg = true;
-        console.log("Starting login by gg");
-        const googleUser = await this.$gAuth.signIn();
-        console.log("googleUser", googleUser);
+
+        window.location.href = "http://localhost:8082/api/v1/auth/login/google";
         this.loadingGg = false;
       } catch (error) {
         this.loadingGg = false;
