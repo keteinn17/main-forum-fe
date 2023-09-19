@@ -15,6 +15,14 @@ class AuthService {
     return response.data;
   }
 
+  async loginByGoogle() {
+    const response = await axios.get(API_URL + "login/google");
+    if (response) {
+      console.log("Login by google: ", response);
+    }
+    return response;
+  }
+
   logout() {
     localStorage.removeItem("user");
     //localStorage.removeItem("token");

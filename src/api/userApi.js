@@ -15,3 +15,10 @@ export const register = (data) => {
     data: data,
   });
 };
+
+export const loginByGoogle = () => {
+  return request({
+    url: "/auth/login/google",
+    method: "get",
+  });
+};

@@ -1,3 +1,4 @@
+<!-- eslint-disable no-unused-vars -->
 <template>
   <div class="container">
     <div class="card card-container">
@@ -71,6 +72,12 @@
 <script>
 import { Form } from "vee-validate";
 import * as yup from "yup";
+// eslint-disable-next-line no-unused-vars
+import axios from "axios";
+// eslint-disable-next-line no-unused-vars
+import $ from "jquery";
+// eslint-disable-next-line no-unused-vars
+import { loginByGoogle } from "@/api/userApi";
 
 export default {
   name: "LoginVue",
@@ -119,7 +126,7 @@ export default {
           this.$router.push("/");
         },
         (error) => {
-          this.loading = false;
+          this.loadingJWT = false;
           this.message =
             (error.response &&
               error.response.data &&
@@ -131,10 +138,57 @@ export default {
     },
     async handleGoogleLogin() {
       try {
-        this.loadingGg = true;
+        // await loginByGoogle().then((res) => {
+        //   console.log(res);
+        // });
+        // await axios
+        //   .get("http://localhost:8082/api/v1/auth/login/google")
+        //   .then((response) => {
+        //     // Handle the response here
+        //     console.log(response.data);
 
-        window.location.href = "http://localhost:8082/api/v1/auth/login/google";
+        //     // Redirect to another link
+        //     window.location.href =
+        //       "http://localhost:8082/oauth2/authorization/google";
+        //   })
+        //   .catch((error) => {
+        //     // Handle the error here
+        //     console.error(error);
+        //   });
+        // this.loadingGg = true;
+        // window.location.href = "http://localhost:8082/api/v1/auth/login/google";
         this.loadingGg = false;
+        $.ajax({
+          url: "http://localhost:8082/api/v1/auth/login/google",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          success: function (response) {
+            // Request succeeded
+            console.log(response);
+          },
+          error: function (error) {
+            // Request failed
+            console.log("Error:", error);
+          },
+        });
+        // this.loadingGg = true;
+        // this.$store.dispatch("auth/login/google").then(
+        //   () => {
+        //     this.loadingGg = false;
+        //     this.$router.push("/");
+        //   },
+        //   (error) => {
+        //     this.loadingGg = false;
+        //     this.message =
+        //       (error.response &&
+        //         error.response.data &&
+        //         error.response.data.message) ||
+        //       error.message ||
+        //       error.toString();
+        //   }
+        // );
       } catch (error) {
         this.loadingGg = false;
         console.log(error.message);
