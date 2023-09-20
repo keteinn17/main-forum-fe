@@ -7,6 +7,7 @@
   <div class="custom-container">
     <div class="custom-sidebar">
       <h3 class="custom-sidebar-heading">Đại sảnh</h3>
+      <ul></ul>
       <!-- <h3 class="custom-latest-posts-heading">Latest posts</h3>
       <ul>
         <li v-for="(post, index) in latestPost.slice(0, 5)" :key="index">
@@ -66,7 +67,7 @@
     </div>
     <div class="custom-latest-posts">
       <h3 class="custom-latest-posts-heading">Latest posts</h3>
-      <ul>
+      <!-- <ul>
         <li v-for="(post, index) in latestPost.slice(0, 5)" :key="index">
           <PostListItem
             :id="post._id"
@@ -93,7 +94,7 @@
             :path="user && redirect(user._id)"
           ></PostListItem>
         </li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>
@@ -159,13 +160,14 @@ export default {
 .custom-sidebar {
   flex: 3;
   height: fit-content;
+  background-color: #5c7099;
 }
 
 .custom-sidebar-heading {
   color: #ebeced;
   font-size: 21px;
   font-weight: medium;
-  background-color: #5c7099;
+  /* background-color: #5c7099; */
   padding: 6px 10px;
 }
 
@@ -196,6 +198,7 @@ export default {
   font-weight: medium;
   background-color: #ebeced;
   padding: 6px 10px;
+  margin-right: 1rem;
 }
 
 .custom-latest-posts-heading {

@@ -79,6 +79,8 @@ import $ from "jquery";
 // eslint-disable-next-line no-unused-vars
 import { loginByGoogle } from "@/api/userApi";
 
+//import authService from "@/services/auth.service";
+
 export default {
   name: "LoginVue",
   components: {
@@ -116,7 +118,7 @@ export default {
     }
   },
   methods: {
-    handleLogin(user) {
+    async handleLogin(user) {
       this.loadingJWT = true;
       user.email = this.email;
       user.password = this.password;
@@ -135,6 +137,20 @@ export default {
             error.toString();
         }
       );
+      // await authService.login(user).then(
+      //   () => {
+      //     this.loadingJWT = false;
+      //     this.$router.push("/profile");
+      //   },
+      //   (error) => {
+      //     this.loadingJWT = false;
+      //     this.message =
+      //       error.response &&
+      //       error.response.data &&
+      //       error.response.data.message;
+      //     error.message || error.toString();
+      //   }
+      // );
     },
     async handleGoogleLogin() {
       try {
