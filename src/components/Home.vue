@@ -7,7 +7,6 @@
   <div class="custom-container">
     <div class="custom-sidebar">
       <h3 class="custom-sidebar-heading">Đại sảnh</h3>
-      <ul></ul>
       <!-- <h3 class="custom-latest-posts-heading">Latest posts</h3>
       <ul>
         <li v-for="(post, index) in latestPost.slice(0, 5)" :key="index">
@@ -110,6 +109,17 @@ export default {
       limit: 5, // Your limit value
     };
   },
+  computed: {
+    currentUser() {
+      console.log(localStorage);
+      return this.$store.state.auth.user;
+    },
+  },
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
+    }
+  },
   methods: {
     setLimitInc(value) {
       this.limitInc = value;
@@ -169,6 +179,8 @@ export default {
   font-weight: medium;
   /* background-color: #5c7099; */
   padding: 6px 10px;
+  border: 2px;
+  border-radius: 5px;
 }
 
 .custom-sidebar-list {

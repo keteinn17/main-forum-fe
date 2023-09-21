@@ -407,7 +407,9 @@ export default {
   padding: 0;
   margin: 0 0 5px 0;
   font-size: 1.5rem;
+
   font-weight: 350;
+
   min-width: 0;
   margin-right: auto;
   margin-left: 15rem;
