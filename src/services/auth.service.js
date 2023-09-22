@@ -14,6 +14,7 @@ class AuthService {
       localStorage.setItem("role", JSON.stringify(response.data.role));
       console.log(localStorage.getItem("user"));
     }
+
     return response.data;
   }
 

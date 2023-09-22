@@ -122,9 +122,9 @@ export default {
   },
   methods: {
     async getUserInfo() {
+      console.log("token: ", localStorage.getItem("user"));
       await getUserInfo().then((res) => {
         console.log(res.data);
-        // this.user = res.data;
         this.user = res.data;
         const date = new Date(this.user.createAt);
         const formattedDate = date.toLocaleDateString("en-GB", {
@@ -543,6 +543,11 @@ td.col1 {
 }
 td.col2 {
   height: 5rem;
+}
+
+td.col1 {
+  text-align: right;
+  padding-right: 2rem;
 }
 
 @media (max-width: 600px) {

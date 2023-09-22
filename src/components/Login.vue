@@ -41,7 +41,7 @@
           <span>Login</span>
         </button>
         <br />
-        <button
+        <!-- <button
           class="google-login-button"
           @click="handleGoogleLogin"
           :disabled="loadingGg"
@@ -50,9 +50,9 @@
             v-show="loadingGg"
             class="spinner-border spinner-border-sm"
           ></span>
-          <i class="fab fa-google"></i>
-          <span>Login with Google</span>
-        </button>
+          <i class="fab fa-google"></i> -->
+        <GoogleLogin :callback="handleGoogleLogin" />
+        <!-- </button> -->
         <!-- <div>
           <GoogleLogin :callback="callback" prompt auto-login>
             <button>Add</button>
@@ -123,7 +123,10 @@ export default {
       user.email = this.email;
       user.password = this.password;
       this.$store.dispatch("auth/login", user).then(
-        () => {
+        (response) => {
+          console.log(response);
+          // localStorage.setItem("user", JSON.stringify(response.access_token));
+          // localStorage.setItem("role", JSON.stringify(response.role));
           this.loadingJWT = false;
           this.$router.push("/");
         },
@@ -138,14 +141,24 @@ export default {
         }
       );
     },
-    async handleGoogleLogin() {
+    handleGoogleLogin(response) {
+      this.loadingJWT = true;
       try {
-        this.loadingGg = true;
-        window.location.href = "http://localhost:8082/login/oauth2/code/google";
-        this.loadingGg = false;
+        console.log("Handle the response", response);
+        if (response) {
+          localStorage.setItem("user", JSON.stringify(response.credential));
+          console.log("set token to local storage: ", response.credential);
+          this.loadingJWT = false;
+          this.$router.push("/");
+        }
       } catch (error) {
-        this.loadingGg = false;
-        console.log(error.message);
+        this.loadingJWT = false;
+        this.message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
       }
     },
   },
