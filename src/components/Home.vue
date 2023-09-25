@@ -6,103 +6,29 @@
   </div>
   <div class="custom-container">
     <div class="custom-sidebar">
-      <h3 class="custom-sidebar-heading">Đại sảnh</h3>
-      <!-- <h3 class="custom-latest-posts-heading">Latest posts</h3>
-      <ul>
-        <li v-for="(post, index) in latestPost.slice(0, 5)" :key="index">
-          <PostListItem
-            :id="post._id"
-            :img="
-              users
-                ? users.avatar
-                : 'https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg'
-            "
-            :title="post.title"
-            :postDate="
-              timeAgo.format(
-                new Date(
-                  post.updatedAt === post.createdAt
-                    ? post.createdAt
-                    : post.updatedAt
-                )
-              )
-            "
-            :postUpdateDate="''"
-            :username="user ? user.userName : 'Unknown'"
-            :dateTitle="'Latest:'"
-            :updateDateTitle="''"
-            class="custom-latest-post-item"
-            :path="user && redirect(user._id)"
-          ></PostListItem>
-        </li>
-      </ul> -->
-      <!-- <ul class="custom-sidebar-list">
-        <li v-for="(post, index) in posts" :key="index">
-          <PostListItem
-            :id="post._id"
-            :img="
-              users
-                ? users.avatar
-                : 'https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg'
-            "
-            :title="post.title"
-            :postDate="formatDate(post.createdAt)"
-            :postUpdateDate="formatDate(post.updatedAt)"
-            :username="users ? users.userName : 'Unknown'"
-            :dateTitle="'Created at:'"
-            :updateDateTitle="'Updated at:'"
-            class="custom-post-item"
-            :path="users && redirect(users._id)"
-          ></PostListItem>
-        </li>
-        <button
-          v-on:click="() => setLimitInc(limitInc + 5)"
-          class="custom-load-more-btn"
-          :class="{ hidden: limitInc >= limit }"
-        >
-          Load more
-        </button>
-      </ul> -->
+      <div
+        class="category"
+        v-for="(category, index) in categories"
+        :key="index"
+      >
+        <h3 class="custom-sidebar-heading">{{ category.name }}</h3>
+        <div class="data-post"></div>
+      </div>
     </div>
     <div class="custom-latest-posts">
       <h3 class="custom-latest-posts-heading">Latest posts</h3>
-      <!-- <ul>
-        <li v-for="(post, index) in latestPost.slice(0, 5)" :key="index">
-          <PostListItem
-            :id="post._id"
-            :img="
-              users
-                ? users.avatar
-                : 'https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg'
-            "
-            :title="post.title"
-            :postDate="
-              timeAgo.format(
-                new Date(
-                  post.updatedAt === post.createdAt
-                    ? post.createdAt
-                    : post.updatedAt
-                )
-              )
-            "
-            :postUpdateDate="''"
-            :username="user ? user.userName : 'Unknown'"
-            :dateTitle="'Latest:'"
-            :updateDateTitle="''"
-            class="custom-latest-post-item"
-            :path="user && redirect(user._id)"
-          ></PostListItem>
-        </li>
-      </ul> -->
     </div>
   </div>
 </template>
 
 <script>
+import { getAllcategory } from "@/api/categoryApi";
+import { getAllTopic } from "@/api/topicApi";
 export default {
   data() {
     return {
-      posts: [], // Your posts data
+      categories: [], // Your posts data
+      topics: [],
       latestPost: [], // Your latest posts data
       users: {}, // Your users data
       limitInc: 0, // Your limit increment value
@@ -115,22 +41,38 @@ export default {
       return this.$store.state.auth.user;
     },
   },
+  created() {
+    getAllcategory().then((response) => {
+      this.categories = response.data;
+      console.log(response.data);
+      console.log(this.categories);
+    });
+  },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
+    this.getAllTopic();
   },
+
   methods: {
     setLimitInc(value) {
       this.limitInc = value;
     },
     formatDate(date) {
       console.log(date);
-      // Implement your date formatting logic here
     },
     redirect(userId) {
       console.log(userId);
-      // Implement your redirect logic here
+    },
+    async getAllTopic() {
+      const categoryId = [];
+      this.categories.forEach((category) => {
+        categoryId.push(category.categoryId);
+      });
+      await getAllTopic(categoryId).then((response) => {
+        console.log(response);
+      });
     },
   },
 };
@@ -147,6 +89,7 @@ export default {
   padding-right: 16px;
   position: relative;
   display: flex;
+  margin-top: 4rem;
 }
 .custom-style {
   display: inline-grid;
@@ -170,17 +113,22 @@ export default {
 .custom-sidebar {
   flex: 3;
   height: fit-content;
-  background-color: #5c7099;
+  /* background-color: #5c7099; */
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .custom-sidebar-heading {
   color: #ebeced;
   font-size: 21px;
   font-weight: medium;
-  /* background-color: #5c7099; */
+  background-color: #5c7099;
   padding: 6px 10px;
   border: 2px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
+  max-height: 3rem;
+  margin-bottom: 0;
+  text-align: left;
 }
 
 .custom-sidebar-list {
@@ -211,6 +159,7 @@ export default {
   background-color: #ebeced;
   padding: 6px 10px;
   margin-right: 1rem;
+  height: 100px;
 }
 
 .custom-latest-posts-heading {
@@ -218,6 +167,7 @@ export default {
   font-weight: medium;
   /* padding: 10px; */
   font-size: 1rem;
+  max-height: 3rem;
 }
 h3 .custom-latest-posts-heading {
   font-size: 1rem;
@@ -230,6 +180,15 @@ h3 .custom-latest-posts-heading {
   color: #5c7099;
   font-weight: medium;
   cursor: pointer;
+}
+.data-post {
+  background-color: #e2e3e5;
+  height: 100px;
+  width: 100%;
+  margin-top: 0px;
+}
+.category {
+  margin-bottom: 1rem;
 }
 
 /* Add any other CSS classes here with their respective styles */

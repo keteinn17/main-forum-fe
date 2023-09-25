@@ -122,7 +122,6 @@ export default {
   },
   methods: {
     async getUserInfo() {
-      console.log("token: ", localStorage.getItem("user"));
       await getUserInfo().then((res) => {
         console.log(res.data);
         this.user = res.data;
@@ -160,6 +159,7 @@ export default {
   color: #23497c;
   padding-left: 16px;
   padding-right: 16px;
+  margin-top: 4rem;
 }
 
 .profile-navigation {
