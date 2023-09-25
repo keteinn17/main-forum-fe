@@ -9,14 +9,26 @@ class AuthService {
       password: user.password,
     });
     if (response.data) {
-      console.log("Loginnnnnnn: ", JSON.stringify(response.data.message));
-      localStorage.setItem("user", JSON.stringify(response.data.message));
+      //console.log("Loginnnnnnn: ", JSON.stringify(response.data));
+      localStorage.setItem("user", JSON.stringify(response.data.access_token));
+      localStorage.setItem("role", JSON.stringify(response.data.role));
+      console.log(localStorage.getItem("user"));
     }
+
     return response.data;
+  }
+
+  async loginByGoogle() {
+    const response = await axios.get(API_URL + "login/google");
+    if (response) {
+      console.log("Login by google: ", response);
+    }
+    return response;
   }
 
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
     //localStorage.removeItem("token");
   }
 

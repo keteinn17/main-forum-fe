@@ -10,7 +10,6 @@ const token = JSON.parse(localStorage.getItem("user"));
 
 service.interceptors.request.use((config) => {
   if (token) {
-    console.log(token);
     if (!config.headers["Content-Type"]) {
       config.headers["Content-Type"] = "application/json";
     }

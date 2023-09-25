@@ -200,6 +200,7 @@ export default {
           await register(this.user).then((res) => {
             console.log(res);
           });
+          this.loading = false;
 
           console.log("Success send request");
         } catch (e) {
@@ -231,7 +232,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
   top: 0;
   right: 0;
   left: 0;
@@ -277,6 +277,8 @@ export default {
   padding: 10px;
   border-radius: 10px;
   animation: fadeIn 0.3s;
+  margin-left: 20rem;
+  margin-top: 10rem;
 }
 
 .title {
