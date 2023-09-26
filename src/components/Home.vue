@@ -12,7 +12,30 @@
         :key="index"
       >
         <h3 class="custom-sidebar-heading">{{ category.name }}</h3>
-        <div class="data-post"></div>
+        <!-- <div class="data-post" v-for="(topic, index) in topics" :key="index">
+          <div v-if="topic.categoryId === category.categoryId">
+            {{ topic.title }}
+          </div>
+        </div> -->
+        <div
+          class="data-post"
+          v-for="(topic, index) in topicsInCategory"
+          :key="index"
+        >
+          <div v-if="topic.categoryId === category.categoryId">
+            <div
+              class="column-in-topic"
+              v-for="(topicLitte, index) in topic.topic"
+              :key="index"
+            >
+              <table>
+                <tr>
+                  <td>{{ topicLitte.title }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="custom-latest-posts">
@@ -27,8 +50,10 @@ import { getAllTopic } from "@/api/topicApi";
 export default {
   data() {
     return {
-      categories: [], // Your posts data
+      categories: [],
+      categoryId: [], // Your posts data
       topics: [],
+      topicsInCategory: [],
       latestPost: [], // Your latest posts data
       users: {}, // Your users data
       limitInc: 0, // Your limit increment value
@@ -42,17 +67,25 @@ export default {
     },
   },
   created() {
-    getAllcategory().then((response) => {
-      this.categories = response.data;
-      console.log(response.data);
-      console.log(this.categories);
-    });
+    getAllcategory().then(
+      (response) => {
+        this.categories = response.data;
+        this.categories.forEach((category) => {
+          this.categoryId.push(category.categoryId);
+        });
+        console.log(this.categoryId);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    this.getAllTopic();
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
-    this.getAllTopic();
+    // this.getAllTopic();
   },
 
   methods: {
@@ -66,13 +99,28 @@ export default {
       console.log(userId);
     },
     async getAllTopic() {
-      const categoryId = [];
-      this.categories.forEach((category) => {
-        categoryId.push(category.categoryId);
-      });
-      await getAllTopic(categoryId).then((response) => {
-        console.log(response);
-      });
+      getAllTopic().then(
+        (response) => {
+          this.topics = response.data;
+          console.log(this.topics);
+          this.categoryId.forEach((categoryId) => {
+            const topicList = [];
+            this.topics.forEach((topic) => {
+              if (topic.categoryId === categoryId) {
+                topicList.push(topic);
+              }
+            });
+            this.topicsInCategory.push({
+              categoryId: categoryId,
+              topic: topicList,
+            });
+            console.log(this.topicsInCategory);
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
   },
 };
@@ -183,12 +231,17 @@ h3 .custom-latest-posts-heading {
 }
 .data-post {
   background-color: #e2e3e5;
-  height: 100px;
+  height: 100%;
   width: 100%;
   margin-top: 0px;
 }
 .category {
   margin-bottom: 1rem;
+}
+.column-in-topic {
+  height: 3rem;
+  text-align: center;
+  border-bottom: 1px solid #23497c;
 }
 
 /* Add any other CSS classes here with their respective styles */

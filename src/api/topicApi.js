@@ -6,10 +6,9 @@ export const createTopic = () => {
   });
 };
 
-export const getAllTopic = (data) => {
+export const getAllTopic = () => {
   return request({
-    url: "/topic/get_all",
+    url: "/topic/get_all_topics",
     method: "get",
-    data: data,
   });
 };
