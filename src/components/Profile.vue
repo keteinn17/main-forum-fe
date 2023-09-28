@@ -27,59 +27,104 @@
         </div>
       </div>
     </div>
-    <div class="p-body-content">
-      <div v-if="showProfile">
+    <div class="tab-pane fade active show body-content" id="account-general">
+      <div class="card-body media align-items-center">
+        <img
+          src="https://bootdey.com/img/Content/avatar/avatar1.png"
+          alt
+          class="d-block ui-w-80"
+        />
+        <div class="media-body ml-4">
+          <label class="btn btn-outline-primary">
+            Upload new photo
+            <input type="file" class="account-settings-fileinput" />
+          </label>
+          &nbsp;
+          <button type="button" class="btn btn-default md-btn-flat">
+            Reset
+          </button>
+          <div class="text-light small mt-1">
+            Allowed JPG, GIF or PNG. Max size of 800K
+          </div>
+        </div>
+      </div>
+      <hr class="border-light m-0" />
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control mb-1"
+            v-model="user.username"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" value="Nelle Maxwell" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail</label>
+          <input
+            type="text"
+            class="form-control mb-1"
+            value="nmaxwell@mail.com"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company</label>
+          <input type="text" class="form-control" value="Company Ltd." />
+        </div>
+      </div>
+    </div>
+    <!-- <div class="p-body-content">
+      <div class="content" v-if="showProfile">
+        <div class="avatar-row">
+          <div class="avatar-background">
+            <img
+              class="avatar"
+              src="https://upload.wikimedia.org/wikipedia/vi/thumb/c/c7/Logo_Real_Madrid.svg/1200px-Logo_Real_Madrid.svg.png"
+              alt="avatar"
+            />
+          </div>
+          <button class="change-avatar-button">Change avatar</button>
+        </div>
+        <div class="email-row"></div>
         <table v-if="user">
           <tbody>
-            <tr>
+            <tr class="username-col">
               <td class="col1">Username:</td>
-              <td class="col2">{{ user.username }}</td>
+              <td class="col2-username">
+                <div>{{ user.username }}</div>
+                <div><button>Change username</button></div>
+              </td>
             </tr>
             <tr>
               <td class="col1">Email:</td>
               <td class="col2">{{ user.email }}</td>
             </tr>
             <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
+              <td class="col1">Avatar:</td>
+              <td class="col2">{{ user.avatar }}</td>
             </tr>
             <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
+              <td class="col1">Full name:</td>
+              <td class="col2">{{ user.firstName }} {{ user.lastName }}</td>
             </tr>
             <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
+              <td class="col1">Date of birth:</td>
+              <td class="col2">{{ user.dateOfBirth }}</td>
             </tr>
             <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
-            </tr>
-            <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
-            </tr>
-            <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
-            </tr>
-            <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
-            </tr>
-            <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
-            </tr>
-            <tr>
-              <td class="col1">Col1</td>
-              <td class="col2">Col2</td>
+              <td class="col1">Gender:</td>
+              <td class="col2">
+                <font-awesome-icon icon="male" />
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div v-else-if="showSetting" class="show-setting">Show setting</div>
-    </div>
+    </div> -->
   </div>
   <ProfileForm
     v-if="toggleEditProfile"
@@ -427,7 +472,6 @@ export default {
 }
 
 .p-body-content {
-  padding-left: 10px;
   display: table-cell;
   vertical-align: top;
   box-sizing: border-box;
@@ -437,9 +481,9 @@ export default {
   box-sizing: border-box;
   margin-right: 15rem;
   margin-left: 2rem;
+  border-radius: 5px;
 }
 .p-body-content[data-v-bf1681ae] {
-  padding-left: 10px;
   display: flex;
   flex-direction: row;
   margin-top: 4px;
@@ -521,8 +565,6 @@ dl {
 .column-1 {
   width: 30%;
 }
-.column-2 {
-}
 
 .p-body-content-title {
   margin-top: 2rem;
@@ -535,11 +577,6 @@ dl {
   width: 21rem;
   border-left: 1px solid #23497c;
 }
-/* td {
-  padding: 10px;
-  text-align: center;
-  border-left: 1px solid #000;
-} */
 
 td.col1 {
   height: 5px;
@@ -551,6 +588,103 @@ td.col2 {
 td.col1 {
   text-align: right;
   padding-right: 2rem;
+}
+.body-content {
+  flex: 3;
+}
+.col2-username {
+  display: flex;
+}
+.avatar {
+  height: 20%;
+  width: 50%;
+}
+.avatar-row {
+  width: 100%;
+  height: 300px;
+  border-bottom: 1px solid #9a919b;
+}
+
+.content {
+  margin-top: 2rem;
+  width: 100%;
+  height: 300px;
+}
+.avatar-background {
+  align-items: center;
+  max-height: 300px;
+  width: 300px;
+  margin: auto;
+}
+
+body {
+  background: #f5f5f5;
+  margin-top: 20px;
+}
+
+.ui-w-80 {
+  width: 80px !important;
+  height: auto;
+}
+
+.btn-default {
+  border-color: rgba(24, 28, 33, 0.1);
+  background: rgba(0, 0, 0, 0);
+  color: #4e5155;
+}
+
+label.btn {
+  margin-bottom: 0;
+}
+
+.btn-outline-primary {
+  border-color: #26b4ff;
+  background: transparent;
+  color: #26b4ff;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.text-light {
+  color: #babbbc !important;
+}
+
+.account-settings-fileinput {
+  position: absolute;
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.active {
+  font-weight: bold !important;
+}
+
+.active {
+  background: transparent !important;
+}
+
+.active {
+  color: #4e5155 !important;
+}
+
+.active {
+  color: #4e5155 !important;
+}
+
+.active {
+  color: #fff !important;
+}
+
+.active {
+  color: #4e5155 !important;
+}
+.form-label {
+  color: #b5b9bd;
+  margin-left: 0;
 }
 
 @media (max-width: 600px) {

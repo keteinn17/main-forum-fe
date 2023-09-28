@@ -10,7 +10,7 @@ export const getUserInfo = () => {
 export const register = (data) => {
   console.log(data);
   return request({
-    url: "/auth/register",
+    url: "/auth/registry",
     method: "post",
     data: data,
   });
