@@ -65,7 +65,6 @@ import axios from "axios";
 import $ from "jquery";
 // eslint-disable-next-line no-unused-vars
 import { loginByGoogle } from "@/api/userApi";
-
 //import authService from "@/services/auth.service";
 
 export default {
@@ -90,6 +89,7 @@ export default {
         console.log(response);
         this.$router.push("/profile");
       },
+      googleAccessToken: "",
     };
   },
   computed: {
@@ -110,8 +110,6 @@ export default {
       this.$store.dispatch("auth/login", user).then(
         (response) => {
           console.log(response);
-          // localStorage.setItem("user", JSON.stringify(response.access_token));
-          // localStorage.setItem("role", JSON.stringify(response.role));
           this.loadingJWT = false;
           this.$router.push("/");
         },
@@ -126,28 +124,23 @@ export default {
         }
       );
     },
-    handleGoogleLogin(response) {
+    async handleGoogleLogin(response) {
       this.loadingGg = true;
       try {
         console.log("Handle the response", response);
         if (response) {
+          // const token = String(response.credential);
+          console.log(this.googleAccessToken);
           localStorage.setItem("user", JSON.stringify(response.credential));
           console.log("set token to local storage: ", response.credential);
           this.loadingJWT = false;
           this.$router.push("/");
+          // await loginByGoogle(token).then((res) => {
+          //   console.log(res);
+          // });
+          // console.log("Da qua day...");
           window.location.href = "http://localhost:8081/";
         }
-        // const headers = {
-        //   "Access-Control-Allow-Origin": "*",
-        // };
-        // const response = await axios.get(
-        //   "http://localhost:8082/api/v1/auth/login_google",
-        //   headers
-        // );
-        // console.log(response);
-        // window.location.href = response.data;
-        // const token = this.getJwtTokenFromUrl();
-        // console.log(token);
       } catch (error) {
         this.loadingGg = false;
         this.message =
@@ -157,34 +150,6 @@ export default {
           error.message ||
           error.toString();
       }
-    },
-    async handleGoogleLogin2() {
-      this.loadingGg = true;
-      try {
-        const headers = {
-          "Access-Control-Allow-Origin": "*",
-        };
-        const response = await axios.get(
-          "http://localhost:8082/api/v1/auth/login_google",
-          headers
-        );
-        console.log(response);
-        window.location.href = response.data;
-        const token = this.getJwtTokenFromUrl();
-        console.log(token);
-      } catch (error) {
-        this.loadingGg = false;
-        this.message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-      }
-    },
-    getJwtTokenFromUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get("token");
     },
   },
 };

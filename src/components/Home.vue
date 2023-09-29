@@ -47,9 +47,12 @@
 <script>
 import { getAllcategory } from "@/api/categoryApi";
 import { getAllTopic } from "@/api/topicApi";
+// eslint-disable-next-line no-unused-vars
+import { loginByGoogle } from "@/api/userApi";
 export default {
   data() {
     return {
+      googleAccessToken: "",
       categories: [],
       categoryId: [], // Your posts data
       topics: [],
@@ -66,7 +69,11 @@ export default {
       return this.$store.state.auth.user;
     },
   },
-  created() {
+  created() {},
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
+    }
     getAllcategory().then(
       (response) => {
         this.categories = response.data;
@@ -80,12 +87,6 @@ export default {
       }
     );
     this.getAllTopic();
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
-    }
-    // this.getAllTopic();
   },
 
   methods: {

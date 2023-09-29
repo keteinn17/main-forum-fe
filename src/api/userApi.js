@@ -16,9 +16,10 @@ export const register = (data) => {
   });
 };
 
-export const loginByGoogle = () => {
+export const loginByGoogle = (token) => {
   return request({
-    url: "/auth/login/google",
-    method: "get",
+    url: "/auth/login_google",
+    method: "post",
+    data: token,
   });
 };
