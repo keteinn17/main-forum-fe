@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-
+import authHeader from "@/services/auth-header";
 export const getUserInfo = () => {
   return request({
     url: "/user/profile",
@@ -16,10 +16,10 @@ export const register = (data) => {
   });
 };
 
-export const loginByGoogle = (token) => {
+export const loginByGoogle = () => {
   return request({
     url: "/auth/login_google",
-    method: "post",
-    data: token,
+    method: "get",
+    headers: authHeader(),
   });
 };

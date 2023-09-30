@@ -38,6 +38,8 @@
         <div class="input-box">
           <input
             type="password"
+            pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"
+            title="Wrong password"
             placeholder="Confirm password"
             v-model="user.confirmPassword"
             required
@@ -45,9 +47,18 @@
           <i class="bx bxs-lock-alt"></i>
         </div>
         <div class="gender-wrapper">
-          <label> <input name="gender" type="radio" />MALE</label>
-          <label> <input name="gender" type="radio" />FEMALE</label>
-          <label> <input name="gender" type="radio" />OTHER</label>
+          <div
+            v-for="(gender, index) in genderList"
+            :key="index"
+            class="gender-option"
+          >
+            <input
+              type="radio"
+              name="gender"
+              @change="setGenderValue(gender)"
+            />
+            <span class="gender-option-label">{{ gender }}</span>
+          </div>
         </div>
         <div class="input-box">
           <input
@@ -74,7 +85,6 @@
             type="date"
             placeholder="Date of birth"
             v-model="user.dateOfBirth"
-            required
           />
         </div>
         <button @submit="handleRegister" :disabled="loading" class="btn">
@@ -148,6 +158,15 @@ export default {
     if (this.loggedIn) {
       this.$router.push("/profile");
     }
+  },
+  watch: {
+    user: {
+      handler(newUser, oldUser) {
+        console.log(newUser);
+        console.log(oldUser);
+      },
+      deep: true,
+    },
   },
   methods: {
     setGenderValue(gender) {
@@ -277,29 +296,15 @@ body {
 
 .wrapper .gender-wrapper {
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+.gender-option {
+  display: flex;
 }
 .gender-wrapper label {
   justify-content: space-between;
   margin-left: 2rem;
-}
-
-.wrapper .remember-forgot {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14.5px;
-  margin: -15px 0 15px;
-}
-.remember-forgot label input {
-  accent-color: #fff;
-  margin-right: 3px;
-}
-.remember-forgot a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.remember-forgot a:hover {
-  text-decoration: underline;
 }
 
 .wrapper .btn {

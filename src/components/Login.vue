@@ -135,10 +135,10 @@ export default {
           console.log("set token to local storage: ", response.credential);
           this.loadingJWT = false;
           this.$router.push("/");
-          // await loginByGoogle(token).then((res) => {
-          //   console.log(res);
-          // });
-          // console.log("Da qua day...");
+          await loginByGoogle().then((res) => {
+            console.log(res);
+          });
+          console.log("Da qua day...");
           window.location.href = "http://localhost:8081/";
         }
       } catch (error) {
