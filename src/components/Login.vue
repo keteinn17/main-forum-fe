@@ -90,6 +90,7 @@ export default {
         this.$router.push("/profile");
       },
       googleAccessToken: "",
+      accountType: "",
     };
   },
   computed: {
@@ -137,6 +138,11 @@ export default {
           this.$router.push("/");
           await loginByGoogle().then((res) => {
             console.log(res);
+            localStorage.setItem("role", JSON.stringify(res.data.role));
+            localStorage.setItem(
+              "account_type",
+              JSON.stringify(res.data.account_type)
+            );
           });
           console.log("Da qua day...");
           window.location.href = "http://localhost:8081/";

@@ -74,15 +74,24 @@
                     <input
                       type="text"
                       class="form-control mb-1"
-                      value="nmaxwell"
+                      v-model="user.username"
+                      readonly
                     />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Name</label>
+                    <label class="form-label">First name</label>
                     <input
                       type="text"
                       class="form-control"
-                      value="Nelle Maxwell"
+                      v-model="updateProfileRequest.firstName"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Last name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="updateProfileRequest.lastName"
                     />
                   </div>
                   <div class="form-group">
@@ -90,53 +99,128 @@
                     <input
                       type="text"
                       class="form-control mb-1"
-                      value="nmaxwell@mail.com"
+                      :value="user.email"
+                      :readonly="isGoogleAccount"
                     />
-                    <div class="alert alert-warning mt-3">
+                    <div v-if="!isGoogleAccount">
+                      <button class="change-email">Change email</button>
+                    </div>
+                    <!-- <div class="alert alert-warning mt-3">
                       Your email is not confirmed. Please check your inbox.<br />
                       <a href="javascript:void(0)">Resend confirmation</a>
-                    </div>
+                    </div> -->
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">Company</label>
-                    <input
+                  <div class="form-group gender">
+                    <label class="form-label">Gender</label>
+                    <br />
+                    <!-- <input
                       type="text"
                       class="form-control"
                       value="Company Ltd."
-                    />
+                    /> -->
+                    <select v-model="updateProfileRequest.gender">
+                      {{
+                        user.gender
+                      }}
+                      <option
+                        v-for="(gender, index) in genderList"
+                        :key="index"
+                        :value="gender"
+                      >
+                        {{ gender }}
+                      </option>
+                    </select>
                   </div>
+                </div>
+                <div class="save-cancel">
+                  <button
+                    type="button"
+                    class="btn btn-primary change-pw"
+                    @click="handleUpdateProfile"
+                  >
+                    Save changes</button
+                  >&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    @click="onCancelUpdateProfile"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                  {{ message }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-change-password">
                 <div class="card-body pb-2">
                   <div class="form-group">
                     <label class="form-label">Current password</label>
-                    <input type="password" class="form-control" />
+                    <input
+                      type="password"
+                      class="form-control"
+                      v-model="changePasswordRequest.currentPassword"
+                      required
+                    />
                   </div>
                   <div class="form-group">
                     <label class="form-label">New password</label>
-                    <input type="password" class="form-control" />
+                    <input
+                      type="password"
+                      class="form-control"
+                      v-model="changePasswordRequest.newPassword"
+                      required
+                      pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"
+                      title="A password contains at least eight characters, including at least one number and includes both lower and uppercase letters and special characters, for example #, ?, !."
+                    />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Repeat new password</label>
-                    <input type="password" class="form-control" />
+                    <label class="form-label">Confirm new password</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      v-model="changePasswordRequest.confirmNewPassword"
+                      required
+                    />
                   </div>
+                </div>
+                <div class="save-cancel">
+                  <button
+                    type="button"
+                    class="btn btn-primary change-pw"
+                    @click="handleChangePassword"
+                  >
+                    Save changes</button
+                  >&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    @click="onCancelChangePassword"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                  {{ message }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-info">
                 <div class="card-body pb-2">
                   <div class="form-group">
                     <label class="form-label">Bio</label>
-                    <textarea class="form-control" rows="5">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nunc arcu, dignissim sit amet sollicitudin iaculis, vehicula id urna. Sed luctus urna nunc. Donec fermentum, magna sit amet rutrum pretium, turpis dolor molestie diam, ut lacinia diam risus eleifend sapien. Curabitur ac nibh nulla. Maecenas nec augue placerat, viverra tellus non, pulvinar risus.</textarea
+                    <textarea
+                      class="form-control"
+                      rows="5"
+                      v-model="updateProfileRequest.aboutMe"
                     >
+                    </textarea>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Birthday</label>
                     <input
-                      type="text"
+                      type="date"
                       class="form-control"
-                      value="May 3, 1995"
+                      v-model="updateProfileRequest.dateOfBirth"
                     />
                   </div>
                   <div class="form-group">
@@ -158,13 +242,32 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nunc arcu, digni
                     <input
                       type="text"
                       class="form-control"
-                      value="+0 (123) 456 7891"
+                      v-model="updateProfileRequest.phone"
                     />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Website</label>
                     <input type="text" class="form-control" value />
                   </div>
+                </div>
+                <div class="save-cancel">
+                  <button
+                    type="button"
+                    class="btn btn-primary change-pw"
+                    @click="handleUpdateProfile"
+                  >
+                    Save changes</button
+                  >&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    @click="onCancelUpdateProfile"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                  {{ message }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-social-links">
@@ -330,23 +433,60 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nunc arcu, digni
 
 <script>
 //import axios from "axios";
-import { getUserInfo } from "@/api/userApi";
+import { getUserInfo, changePassword, updateProfile } from "@/api/userApi";
+import { required } from "vuelidate/lib/validators";
+// eslint-disable-next-line no-unused-vars
+const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
 
 export default {
   name: "ProfileVue",
   data() {
     return {
       user: {},
+      userAdditionalInfo: {},
+      genderList: ["MALE", "FEMALE", "OTHER"],
       showProfile: false,
       showAlert: false,
       showSetting: false,
+      changePasswordRequest: {
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+      },
+      updateProfileRequest: {
+        firstName: "",
+        lastName: "",
+        dateOfBirth: "",
+        gender: "",
+        phone: "",
+        address: "",
+        aboutMe: "",
+      },
+      message: "",
     };
+  },
+  validations: {
+    updateProfileRequest: {
+      firstName: { required },
+      lastName: { required },
+    },
   },
 
   computed: {
     currentUser() {
       console.log(localStorage);
       return this.$store.state.auth.user;
+    },
+    fullName() {
+      return this.user.firstName + " " + this.user.lastName;
+    },
+    isGoogleAccount() {
+      console.log(localStorage.getItem("account_type"));
+      if (localStorage.getItem("account_type") == JSON.stringify("GOOGLE")) {
+        console.log("Day la google account");
+        return true;
+      }
+      return false;
     },
   },
   created() {
@@ -359,7 +499,26 @@ export default {
     // this.fetchProfileData();
     this.getUserInfo();
   },
+  watch: {
+    changePasswordRequest: {
+      handler(newPw, oldPw) {
+        console.log(newPw);
+        console.log(oldPw);
+      },
+      deep: true,
+    },
+    updateProfileRequest: {
+      handler(newPw, oldPw) {
+        console.log(newPw);
+        console.log(oldPw);
+      },
+      deep: true,
+    },
+  },
   methods: {
+    setGenderValue(gender) {
+      this.updateProfileRequest.gender = gender;
+    },
     async getUserInfo() {
       await getUserInfo().then((res) => {
         console.log(res.data);
@@ -370,19 +529,112 @@ export default {
           month: "2-digit",
           year: "numeric",
         });
+        this.userAdditionalInfo = this.user.userAdditionalInfoProfile;
+        this.updateProfileRequest.firstName = this.user.firstName;
+        this.updateProfileRequest.lastName = this.user.lastName;
+        this.updateProfileRequest.dateOfBirth = this.user.dateOfBirth;
+        this.updateProfileRequest.gender = this.user.gender;
+        this.updateProfileRequest.phone = this.userAdditionalInfo.phone;
+        this.updateProfileRequest.address = this.userAdditionalInfo.address;
+        this.updateProfileRequest.aboutMe = this.userAdditionalInfo.aboutMe;
         this.user.createAt = formattedDate;
         console.log(this.user);
       });
     },
-    handleShowProfile() {
-      this.showProfile = true;
+    checkChangePasswordRequest(event) {
+      event.preventDefault();
+      this.message = "";
+      var passwordRegex = new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})"
+      );
+
+      if (!passwordRegex.test(this.changePasswordRequest.newPassword)) {
+        this.showError = true;
+        this.message =
+          "New password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be 8-20 characters long.";
+        return false;
+      }
+
+      if (
+        this.changePasswordRequest.newPassword !==
+        this.changePasswordRequest.confirmNewPassword
+      ) {
+        //this.showError = true;
+        this.message = "New password and confirm new password must match.";
+        return false;
+      }
+      this.message = "";
+      return true;
     },
-    handleShowAlert() {
-      this.showAlert = true;
+    async handleChangePassword() {
+      var check = this.checkChangePasswordRequest(event);
+      if (!check) return;
+      await changePassword(this.changePasswordRequest).then(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          this.loadingJWT = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
     },
-    handleShowSetting() {
-      this.showProfile = false;
-      this.showSetting = true;
+    async handleUpdateProfile() {
+      if (!this.checkUpdateProfileRequest(event)) return;
+      await updateProfile(this.updateProfileRequest).then(
+        (res) => {
+          this.user = res.data;
+        },
+        (error) => {
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    onCancelChangePassword() {
+      this.changePasswordRequest.currentPassword = "";
+      this.changePasswordRequest.newPassword = "";
+      this.changePasswordRequest.confirmNewPassword = "";
+    },
+    onCancelUpdateProfile() {
+      this.userAdditionalInfo = this.user.userAdditionalInfoProfile;
+      this.updateProfileRequest.firstName = this.user.firstName;
+      this.updateProfileRequest.lastName = this.user.lastName;
+      this.updateProfileRequest.dateOfBirth = this.user.dateOfBirth;
+      this.updateProfileRequest.gender = this.user.gender;
+      this.updateProfileRequest.phone = this.userAdditionalInfo.phone;
+      this.updateProfileRequest.address = this.userAdditionalInfo.address;
+      this.updateProfileRequest.aboutMe = this.userAdditionalInfo.aboutMe;
+    },
+    checkUpdateProfileRequest(event) {
+      event.preventDefault();
+      this.message = "";
+      const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
+      if (!phoneRegex.test(this.updateProfileRequest.phone)) {
+        this.showError = true;
+        this.message = "Incorrect phone number";
+        return false;
+      }
+
+      if (
+        this.updateProfileRequest.firstName === "" ||
+        this.updateProfileRequest.lastName === ""
+      ) {
+        //this.showError = true;
+        this.message = "First name or last name cannot be empty";
+        return false;
+      }
+      this.message = "";
+      return true;
     },
   },
 };
@@ -393,10 +645,9 @@ export default {
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css");
 
 body {
-  background: url("https://wallpaperaccess.com/full/39639.jpg") no-repeat fixed;
+  /* background: url("https://wallpaperaccess.com/full/39639.jpg") no-repeat fixed; */
   background-size: cover;
   background-position: center;
-  margin-top: 20px;
   height: 1000px;
 }
 h4 {
@@ -430,9 +681,15 @@ label.btn {
 .btn {
   cursor: pointer;
 }
+.change-pw {
+  margin-left: 20px;
+}
 
 .text-light {
   color: #babbbc !important;
+}
+.change-email:hover {
+  background-color: #3b5998;
 }
 
 .btn-facebook {
@@ -457,6 +714,10 @@ label.btn {
 
 .row-bordered {
   overflow: hidden;
+}
+.gender {
+  display: flex;
+  flex-direction: row;
 }
 
 .account-settings-fileinput {
@@ -513,5 +774,9 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 .light-style .account-settings-links .list-group-item {
   padding: 0.85rem 1.5rem;
   border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.save-cancel {
+  margin-bottom: 20px;
 }
 </style>

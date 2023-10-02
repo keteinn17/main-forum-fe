@@ -12,6 +12,7 @@ class AuthService {
       //console.log("Loginnnnnnn: ", JSON.stringify(response.data));
       localStorage.setItem("user", JSON.stringify(response.data.access_token));
       localStorage.setItem("role", JSON.stringify(response.data.role));
+      localStorage.setItem("account_type", JSON.stringify("UNKNOWN"));
       console.log(localStorage.getItem("user"));
     }
 
@@ -29,7 +30,7 @@ class AuthService {
   logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("role");
-    //localStorage.removeItem("token");
+    localStorage.removeItem("account_type");
   }
 
   register(user) {

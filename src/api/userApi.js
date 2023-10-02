@@ -23,3 +23,19 @@ export const loginByGoogle = () => {
     headers: authHeader(),
   });
 };
+
+export const changePassword = (data) => {
+  return request({
+    url: "/user/profile/change_password",
+    method: "put",
+    data: data,
+  });
+};
+
+export const updateProfile = (data) => {
+  return request({
+    url: "/user/profile/edit_profile",
+    method: "put",
+    data: data,
+  });
+};

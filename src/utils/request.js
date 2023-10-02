@@ -22,4 +22,13 @@ service.interceptors.response.use((response) => {
   return response;
 });
 
+// service.interceptors.response.use(
+//   (resp) => resp,
+//   async (error) => {
+//     if (error.response.status === 401) {
+//       window.location.href = "http://localhost:8081/login";
+//     }
+//   }
+// );
+
 export default service;
