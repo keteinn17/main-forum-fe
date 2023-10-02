@@ -12,11 +12,6 @@
         :key="index"
       >
         <h3 class="custom-sidebar-heading">{{ category.name }}</h3>
-        <!-- <div class="data-post" v-for="(topic, index) in topics" :key="index">
-          <div v-if="topic.categoryId === category.categoryId">
-            {{ topic.title }}
-          </div>
-        </div> -->
         <div
           class="data-post"
           v-for="(topic, index) in topicsInCategory"
