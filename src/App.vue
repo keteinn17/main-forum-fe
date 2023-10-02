@@ -105,6 +105,9 @@ export default {
 .link {
   color: aliceblue;
 }
+.link:hover {
+  color: red;
+}
 .custom {
   display: flex;
 }

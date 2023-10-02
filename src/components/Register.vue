@@ -1,124 +1,102 @@
 <template>
-  <div class="container" @click="toggleRegister = false">
-    <div class="overlay">
-      <div class="content">
-        <div class="title">Register Form</div>
-        <div class="close-button" @click="toggleRegister = false">
-          <FontAwesomeIcon icon="faClose" />
-        </div>
-        <form
-          @submit.prevent="handleRegister"
-          class="form-field"
-          :validation-schema="schema"
-        >
-          <label for="name" class="form-label">Username</label>
+  <body>
+    <div class="wrapper">
+      <form @submit.prevent="handleRegister" :validation-schema="schema">
+        <h1>Register</h1>
+        <div class="input-box">
           <input
-            class="form-input"
             label="Username:"
             type="text"
             placeholder="Username"
             v-model="user.username"
+            required
           />
-          <br />
-          <label for="email" class="form-label">Email:</label>
+          <i class="bx bx-user"></i>
+        </div>
+        <div class="input-box">
           <input
-            class="form-input"
             label="Email:"
             type="email"
             placeholder="Email"
             v-model="user.email"
+            required
           />
+          <i class="bx bx-envelope"></i>
           <span v-if="v$.user.email.$error">
             {{ v$.email.$errors[0].$message }}
           </span>
-          <br />
-          <!-- <label for="Gender" class="form-label">Gender:</label> -->
-          <div class="gender-wrapper">
-            <label class="gender-label">Gender:</label>
-            <div
-              v-for="(gender, index) in genderList"
-              :key="index"
-              class="gender-option"
-            >
-              <input
-                type="radio"
-                :checked="user.gender === gender"
-                @change="setGenderValue(gender)"
-              />
-              <span class="gender-option-label">{{ gender }}</span>
-            </div>
-          </div>
-          <label for="First name" class="form-label">First Name:</label>
+        </div>
+        <div class="input-box">
           <input
-            class="form-input"
+            type="password"
+            placeholder="Password"
+            v-model="user.password"
+            required
+          />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"
+            title="Wrong password"
+            placeholder="Confirm password"
+            v-model="user.confirmPassword"
+            required
+          />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <div class="gender-wrapper">
+          <div
+            v-for="(gender, index) in genderList"
+            :key="index"
+            class="gender-option"
+          >
+            <input
+              type="radio"
+              name="gender"
+              @change="setGenderValue(gender)"
+            />
+            <span class="gender-option-label">{{ gender }}</span>
+          </div>
+        </div>
+        <div class="input-box">
+          <input
             label="First Name:"
             type="text"
             placeholder="First name"
             v-model="user.firstName"
+            required
           />
-          <br />
-          <label for="Last Name" class="form-label">Last Name:</label>
+          <i class="bx bx-message-rounded-dots"></i>
+        </div>
+        <div class="input-box">
           <input
-            class="form-input"
             label="Phone:"
             type="text"
             placeholder="Last name"
             v-model="user.lastName"
+            required
           />
-          <br />
-          <label for="Date of birth" class="form-label">Date of birth:</label>
+          <i class="bx bx-message-rounded-dots"></i>
+        </div>
+        <div class="input-box">
           <input
-            class="form-input"
-            label="First Name:"
             type="date"
             placeholder="Date of birth"
             v-model="user.dateOfBirth"
           />
-          <br />
-          <!-- <label for="phone" class="form-label">Phone number</label> -->
-          <label for="Password" class="form-label">Password:</label>
-          <input
-            class="form-input"
-            label="Password:"
-            type="password"
-            placeholder="Password"
-            v-model="user.password"
-          />
-          <!-- <label for="password" class="form-label">Password</label> -->
-          <br />
-          <label for="Confirm Password" class="form-label"
-            >Confirm Password:</label
-          >
-          <input
-            class="form-input"
-            label="Confirm password:"
-            type="password"
-            placeholder="Confirm password"
-            v-model="user.confirmPassword"
-          />
-          <!-- <label for="confirmPassword" class="form-label" placeHolder=""
-            >Confirm password</label
-          > -->
-          <div>
-            <button
-              class="register-button"
-              @submit="handleRegister"
-              :disabled="loading"
-            >
-              <span
-                v-show="loading"
-                class="spinner-border spinner-border-sm"
-              ></span>
-              <span>Sign up</span>
-            </button>
-          </div>
-        </form>
-        <div v-if="loading" class="loading-indicator">
-          <FontAwesomeIcon class="spin-icon" icon="faSpinner" />
         </div>
-      </div>
+        <button @submit="handleRegister" :disabled="loading" class="btn">
+          <span
+            v-show="loading"
+            class="spinner-border spinner-border-sm"
+          ></span>
+          Register
+        </button>
+      </form>
     </div>
-  </div>
+  </body>
 </template>
 
 <script>
@@ -130,14 +108,13 @@ import { required, email } from "@vuelidate/validators";
 import * as yup from "yup";
 //import { ref } from "vue";
 //import { ErrorMessage } from "vee-validate";
+// eslint-disable-next-line no-unused-vars
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 //import { Form } from "vee-validate";
 
 export default {
   name: "RegisterForm",
-  components: {
-    FontAwesomeIcon,
-  },
+  components: {},
   data() {
     const schema = yup.object().shape({
       email: yup
@@ -182,12 +159,21 @@ export default {
       this.$router.push("/profile");
     }
   },
+  watch: {
+    user: {
+      handler(newUser, oldUser) {
+        console.log(newUser);
+        console.log(oldUser);
+      },
+      deep: true,
+    },
+  },
   methods: {
     setGenderValue(gender) {
       this.user.gender = gender;
       console.log(this.user);
     },
-    async handleRegister() {
+    async handleRegister(response) {
       this.loading = true;
       console.log(this.user);
       console.log(this.v$);
@@ -201,7 +187,7 @@ export default {
             console.log(res);
           });
           this.loading = false;
-
+          console.log(response);
           console.log("Success send request");
         } catch (e) {
           this.loading = false;
@@ -228,122 +214,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 10;
-}
-
-.form-input {
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  width: 50%;
-  height: 50px;
-  padding: 0 20px;
-  transition: 0.25s ease;
-  margin-bottom: 2px;
-  margin-left: 30%;
-}
-
-.form-input:focus {
-  border-color: #6a5af9;
-}
-
-.form-field {
-  position: relative;
-}
-.form-label {
-  position: absolute;
-  transform: translateY(50%);
-  user-select: none;
-  color: black;
-  pointer-events: none;
-  margin-right: 10%;
-}
-/* .form-input:focus + .form-label {
-  top: 0.5rem;
-} */
-.overlay {
-  position: relative;
-  background-color: #c0c0c0;
-  width: 500px;
-  height: fit-content;
-  padding: 10px;
-  border-radius: 10px;
-  animation: fadeIn 0.3s;
-  margin-left: 20rem;
-  margin-top: 10rem;
-}
-
-.title {
-  font-weight: bold;
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 4px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-form {
-  /* Form styles */
-}
-
-.gender-wrapper {
-  display: flex;
-  margin-bottom: 1px;
-  margin-left: -1%;
-}
-
-.gender-label {
-  /* display: none; */
-  min-width: 160px;
-  color: black;
-}
-
-.gender-option {
-  display: flex;
-  align-items: center;
-  margin-right: 1re;
-  margin-left: 7%;
-}
-
-.gender-option input[type="radio"] {
-  /* Radio button styles */
-}
-
-.gender-option-label {
-  margin-left: 1px;
-}
-
-.register-button {
-  width: 100%;
-  background-color: #5c7099;
-  padding: 12px;
-  color: white;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-
-.loading-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 32px;
-}
-
 .spin-icon {
   color: red;
 }
@@ -356,10 +226,114 @@ form {
     opacity: 1;
   }
 }
-.error-feedback {
-  color: red;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-.form input {
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("https://wallpaperaccess.com/full/39639.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.wrapper {
+  width: 420px;
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+.wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.wrapper .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+  color: #fff;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.wrapper .gender-wrapper {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+.gender-option {
+  display: flex;
+}
+.gender-wrapper label {
+  justify-content: space-between;
+  margin-left: 2rem;
+}
+
+.wrapper .btn {
+  width: 100%;
+  height: 45px;
+  background: #fff;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.wrapper .register-link {
+  font-size: 14.5px;
+  text-align: center;
+  margin: 20px 0 15px;
+}
+
+.register-link p a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link p a:hover {
+  text-decoration: underline;
 }
 </style>

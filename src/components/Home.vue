@@ -8,14 +8,14 @@
     <div class="custom-sidebar">
       <div
         class="category"
-        v-for="(category, index) in categories"
-        :key="index"
+        v-for="category in categories"
+        :key="category.categoryId"
       >
         <h3 class="custom-sidebar-heading">{{ category.name }}</h3>
         <div
           class="data-post"
-          v-for="(topic, index) in topicsInCategory"
-          :key="index"
+          v-for="topic in topicsInCategory"
+          :key="topic.topicId"
         >
           <div v-if="topic.categoryId === category.categoryId">
             <div
@@ -42,9 +42,12 @@
 <script>
 import { getAllcategory } from "@/api/categoryApi";
 import { getAllTopic } from "@/api/topicApi";
+// eslint-disable-next-line no-unused-vars
+import { loginByGoogle } from "@/api/userApi";
 export default {
   data() {
     return {
+      googleAccessToken: "",
       categories: [],
       categoryId: [], // Your posts data
       topics: [],
@@ -61,7 +64,11 @@ export default {
       return this.$store.state.auth.user;
     },
   },
-  created() {
+  created() {},
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
+    }
     getAllcategory().then(
       (response) => {
         this.categories = response.data;
@@ -75,12 +82,6 @@ export default {
       }
     );
     this.getAllTopic();
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
-    }
-    // this.getAllTopic();
   },
 
   methods: {
