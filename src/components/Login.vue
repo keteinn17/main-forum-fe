@@ -135,7 +135,6 @@ export default {
           localStorage.setItem("user", JSON.stringify(response.credential));
           console.log("set token to local storage: ", response.credential);
           this.loadingJWT = false;
-          this.$router.push("/");
           await loginByGoogle().then((res) => {
             console.log(res);
             localStorage.setItem("role", JSON.stringify(res.data.role));
@@ -144,6 +143,7 @@ export default {
               JSON.stringify(res.data.account_type)
             );
           });
+          this.$router.push("/");
           console.log("Da qua day...");
           window.location.href = "http://localhost:8081/";
         }

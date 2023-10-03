@@ -12,3 +12,10 @@ export const getAllTopic = () => {
     method: "get",
   });
 };
+
+export const getAllTopicById = (data) => {
+  return request({
+    url: `/topic/${data}`,
+    method: "get",
+  });
+};

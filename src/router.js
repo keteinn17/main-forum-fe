@@ -4,6 +4,7 @@ import Login from "./components/Login.vue";
 import Profile from "./components/Profile.vue";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import Topic from "./components/Topic";
 const routes = [
   {
     path: "/",
@@ -28,6 +29,12 @@ const routes = [
     path: "/register",
     name: "register",
     component: Register,
+  },
+  {
+    path: "/topic/:topicId",
+    name: "topic",
+    component: Topic,
+    props: true,
   },
 ];
 

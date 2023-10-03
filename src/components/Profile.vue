@@ -422,11 +422,11 @@
           </div>
         </div>
       </div>
-      <div class="text-right mt-3">
+      <!-- <div class="text-right mt-3">
         <button type="button" class="btn btn-primary">Save changes</button
         >&nbsp;
         <button type="button" class="btn btn-default">Cancel</button>
-      </div>
+      </div> -->
     </div>
   </body>
 </template>
