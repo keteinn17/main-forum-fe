@@ -17,40 +17,30 @@
       </div>
 
       <div v-if="currentUser" class="custom-navbar-login-header">
-        <div class="custom">
-          <li class="nav-item">
-            <router-link to="/home" class="link">
-              <font-awesome-icon icon="home" /> Home
-            </router-link>
-          </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin" class="link">Admin Board</router-link>
-          </li>
-          <li v-if="showModeratorBoard" class="nav-item">
-            <router-link to="/mod" class="link">Moderator Board</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link v-if="currentUser" to="/user" class="link"
-              >User</router-link
-            >
-          </li>
-        </div>
-        <li class="nav-item">
-          <router-link to="/profile" class="link">
-            <font-awesome-icon icon="user" />
-            {{ currentUser.username }}
+        <div class="home-page-icon">
+          <router-link to="/home" class="link">
+            <font-awesome-icon icon="home" /> Home
           </router-link>
-        </li>
-        <li class="nav-item">
+        </div>
+        <div class="user-page-icon">
+          <router-link v-if="currentUser" to="/profile" class="link"
+            ><font-awesome-icon icon="user" /> User</router-link
+          >
+        </div>
+        <div class="user-page-icon">
           <a class="link" @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" /> LogOut
           </a>
-        </li>
+        </div>
       </div>
     </nav>
-    <!-- <div v-if="currentUser" class="custom-navbar-after-login"></div> -->
-    <div class="body">
-      <router-view />
+    <div v-if="currentUser" class="navbar-in-forum-container">
+      <nav class="navbar-in-forum"></nav>
+    </div>
+    <div class="body-container">
+      <div class="body">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -88,12 +78,15 @@ export default {
   color: #2c3e50;
   overflow: scroll;
 }
+/* .custom-navbar-login-header .header {
+  color: #e2e3e5;
+  display: flex;
+  justify-content: space-around;
+} */
+
 .custom-navbar-login-header {
   display: flex;
-}
-.container {
-  height: 90%;
-  width: 100%;
+  justify-content: space-between;
 }
 .bg-dark {
   position: fixed;
@@ -108,19 +101,42 @@ export default {
 .link:hover {
   color: red;
 }
-.custom {
-  display: flex;
-}
-.custom-navbar-after-login {
-  background-color: #e2e3e5;
+
+.body-container {
   width: 100%;
-  height: 1rem;
-  margin-top: 2rem;
+  /* height: 100%; */
+  /* margin-top: 4rem; */
+  background: #343a40 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .body {
+  width: 80%;
+  min-height: 1000px;
+  margin-top: 7rem;
+}
+.navbar-in-forum-container {
   width: 100%;
-  height: auto;
+  height: 3rem;
+  background: #e2e3e5 !important;
   margin-top: 4rem;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+}
+.navbar-in-forum {
+  width: 80%;
+  height: 60%;
+  align-items: center;
+  background: #e2e3e5;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+@media (max-width: 800px) {
+  .body {
+    width: 100%;
+  }
 }
 </style>

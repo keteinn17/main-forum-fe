@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="custom-header">
+  <!-- <div class="custom-header">
     <div class="custom-style">All posts</div>
     <div class="custom-style">Find posts</div>
-  </div>
+  </div> -->
   <div class="custom-container">
     <div class="custom-sidebar">
       <div
@@ -25,12 +25,23 @@
           <div v-if="topic.categoryId === category.categoryId">
             <div
               class="column-in-topic"
-              v-for="(topicLitte, index) in topic.topic"
+              v-for="(topicLittle, index) in topic.topic"
               :key="index"
             >
               <table>
                 <tr>
-                  <td>{{ topicLitte.title }}</td>
+                  <td>
+                    <router-link
+                      :to="{
+                        name: 'topic',
+                        params: { topicId: topicLittle.topicId },
+                      }"
+                    >
+                      {{ topicLittle.title }}
+
+                      <!-- {{ topicLittle.title }} -->
+                    </router-link>
+                  </td>
                 </tr>
               </table>
             </div>
@@ -49,7 +60,12 @@ import { getAllcategory } from "@/api/categoryApi";
 import { getAllTopic } from "@/api/topicApi";
 // eslint-disable-next-line no-unused-vars
 import { loginByGoogle } from "@/api/userApi";
+import Topic from "./Topic.vue";
 export default {
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    Topic,
+  },
   data() {
     return {
       googleAccessToken: "",
