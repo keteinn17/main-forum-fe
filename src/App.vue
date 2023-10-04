@@ -107,14 +107,16 @@ export default {
   /* height: 100%; */
   /* margin-top: 4rem; */
   background: #343a40 !important;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 .body {
-  width: 80%;
+  /* width: 60%; */
   min-height: 1000px;
   margin-top: 7rem;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 .navbar-in-forum-container {
   width: 100%;
@@ -134,9 +136,14 @@ export default {
   padding-left: 16px;
   padding-right: 16px;
 }
-@media (max-width: 800px) {
+.Toastify {
+  position: fixed;
+}
+@media (max-width: 1000px) {
   .body {
-    width: 100%;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
 }
 </style>

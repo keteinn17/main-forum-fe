@@ -81,7 +81,6 @@ export default {
   },
   computed: {
     currentUser() {
-      console.log(localStorage);
       return this.$store.state.auth.user;
     },
   },

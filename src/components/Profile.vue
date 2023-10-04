@@ -10,30 +10,35 @@
                 class="list-group-item list-group-item-action active"
                 data-toggle="list"
                 href="#account-general"
+                @click="setErrorMessage"
                 >General</a
               >
               <a
                 class="list-group-item list-group-item-action"
                 data-toggle="list"
                 href="#account-change-password"
+                @click="setErrorMessage"
                 >Change password</a
               >
               <a
                 class="list-group-item list-group-item-action"
                 data-toggle="list"
                 href="#account-info"
+                @click="setErrorMessage"
                 >Info</a
               >
               <a
                 class="list-group-item list-group-item-action"
                 data-toggle="list"
                 href="#account-social-links"
+                @click="setErrorMessage"
                 >Social links</a
               >
               <a
                 class="list-group-item list-group-item-action"
                 data-toggle="list"
                 href="#account-connections"
+                @click="setErrorMessage"
                 >Connections</a
               >
               <a
@@ -105,19 +110,10 @@
                     <div v-if="!isGoogleAccount">
                       <button class="change-email">Change email</button>
                     </div>
-                    <!-- <div class="alert alert-warning mt-3">
-                      Your email is not confirmed. Please check your inbox.<br />
-                      <a href="javascript:void(0)">Resend confirmation</a>
-                    </div> -->
                   </div>
                   <div class="form-group gender">
                     <label class="form-label">Gender</label>
                     <br />
-                    <!-- <input
-                      type="text"
-                      class="form-control"
-                      value="Company Ltd."
-                    /> -->
                     <select v-model="updateProfileRequest.gender">
                       {{
                         user.gender
@@ -148,8 +144,13 @@
                     Cancel
                   </button>
                 </div>
-                <div v-if="message" class="alert alert-danger" role="alert">
-                  {{ message }}
+                <div
+                  v-if="errorMessage"
+                  class="alert alert-danger"
+                  role="alert"
+                  :v-show="showError"
+                >
+                  {{ errorMessage }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-change-password">
@@ -200,8 +201,13 @@
                     Cancel
                   </button>
                 </div>
-                <div v-if="message" class="alert alert-danger" role="alert">
-                  {{ message }}
+                <div
+                  v-if="errorMessage"
+                  class="alert alert-danger"
+                  role="alert"
+                  :v-show="showError"
+                >
+                  {{ errorMessage }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-info">
@@ -266,8 +272,13 @@
                     Cancel
                   </button>
                 </div>
-                <div v-if="message" class="alert alert-danger" role="alert">
-                  {{ message }}
+                <div
+                  v-if="errorMessage"
+                  class="alert alert-danger"
+                  role="alert"
+                  :v-show="showError"
+                >
+                  {{ errorMessage }}
                 </div>
               </div>
               <div class="tab-pane fade" id="account-social-links">
@@ -435,6 +446,7 @@
 //import axios from "axios";
 import { getUserInfo, changePassword, updateProfile } from "@/api/userApi";
 import { required } from "vuelidate/lib/validators";
+import { toast } from "vue3-toastify";
 // eslint-disable-next-line no-unused-vars
 const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
 
@@ -445,9 +457,6 @@ export default {
       user: {},
       userAdditionalInfo: {},
       genderList: ["MALE", "FEMALE", "OTHER"],
-      showProfile: false,
-      showAlert: false,
-      showSetting: false,
       changePasswordRequest: {
         currentPassword: "",
         newPassword: "",
@@ -462,7 +471,8 @@ export default {
         address: "",
         aboutMe: "",
       },
-      message: "",
+      errorMessage: "",
+      showError: true,
     };
   },
   validations: {
@@ -474,16 +484,13 @@ export default {
 
   computed: {
     currentUser() {
-      console.log(localStorage);
       return this.$store.state.auth.user;
     },
     fullName() {
       return this.user.firstName + " " + this.user.lastName;
     },
     isGoogleAccount() {
-      console.log(localStorage.getItem("account_type"));
       if (localStorage.getItem("account_type") == JSON.stringify("GOOGLE")) {
-        console.log("Day la google account");
         return true;
       }
       return false;
@@ -516,12 +523,20 @@ export default {
     },
   },
   methods: {
+    showToast() {
+      console.log("Da vao den day");
+      toast(this.errorMessage, {
+        autoClose: 1000,
+      });
+    },
+    setErrorMessage() {
+      this.errorMessage = false;
+    },
     setGenderValue(gender) {
       this.updateProfileRequest.gender = gender;
     },
     async getUserInfo() {
       await getUserInfo().then((res) => {
-        console.log(res.data);
         this.user = res.data;
         const date = new Date(this.user.createAt);
         const formattedDate = date.toLocaleDateString("en-GB", {
@@ -538,32 +553,32 @@ export default {
         this.updateProfileRequest.address = this.userAdditionalInfo.address;
         this.updateProfileRequest.aboutMe = this.userAdditionalInfo.aboutMe;
         this.user.createAt = formattedDate;
-        console.log(this.user);
       });
     },
     checkChangePasswordRequest(event) {
       event.preventDefault();
-      this.message = "";
+      this.errorMessage = "";
       var passwordRegex = new RegExp(
         "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})"
       );
 
       if (!passwordRegex.test(this.changePasswordRequest.newPassword)) {
         this.showError = true;
-        this.message =
+        this.errorMessage =
           "New password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be 8-20 characters long.";
-        return false;
+        this.showToast();
       }
 
       if (
         this.changePasswordRequest.newPassword !==
         this.changePasswordRequest.confirmNewPassword
       ) {
-        //this.showError = true;
-        this.message = "New password and confirm new password must match.";
+        this.showError = true;
+        this.errorMessage = "New password and confirm new password must match.";
+        this.showToast();
         return false;
       }
-      this.message = "";
+      this.errorMessage = "";
       return true;
     },
     async handleChangePassword() {
@@ -575,12 +590,13 @@ export default {
         },
         (error) => {
           this.loadingJWT = false;
-          this.message =
+          this.errorMessage =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
             error.message ||
             error.toString();
+          this.showToast();
         }
       );
     },
@@ -591,7 +607,8 @@ export default {
           this.user = res.data;
         },
         (error) => {
-          this.message =
+          console.log("error");
+          this.errorMessage =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -601,11 +618,13 @@ export default {
       );
     },
     onCancelChangePassword() {
+      this.showError = false;
       this.changePasswordRequest.currentPassword = "";
       this.changePasswordRequest.newPassword = "";
       this.changePasswordRequest.confirmNewPassword = "";
     },
     onCancelUpdateProfile() {
+      this.showError = false;
       this.userAdditionalInfo = this.user.userAdditionalInfoProfile;
       this.updateProfileRequest.firstName = this.user.firstName;
       this.updateProfileRequest.lastName = this.user.lastName;
@@ -617,11 +636,11 @@ export default {
     },
     checkUpdateProfileRequest(event) {
       event.preventDefault();
-      this.message = "";
+      this.errorMessage = "";
       const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
       if (!phoneRegex.test(this.updateProfileRequest.phone)) {
         this.showError = true;
-        this.message = "Incorrect phone number";
+        this.errorMessage = "Incorrect phone number";
         return false;
       }
 
@@ -629,11 +648,15 @@ export default {
         this.updateProfileRequest.firstName === "" ||
         this.updateProfileRequest.lastName === ""
       ) {
-        //this.showError = true;
-        this.message = "First name or last name cannot be empty";
+        this.showError = false;
+        this.errorMessage = "First name or last name cannot be empty";
+        toast.error(this.message, {
+          autoClose: 3000,
+        });
+        console.log("Da qua day");
         return false;
       }
-      this.message = "";
+      this.errorMessage = "";
       return true;
     },
   },

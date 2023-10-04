@@ -16,6 +16,18 @@ export const auth = {
           return Promise.resolve(user);
         },
         (error) => {
+          commit("loginFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
+    login_google({ commit }) {
+      return AuthService.loginByGoogle().then(
+        (response) => {
+          commit("loginSuccess", response);
+          return Promise.resolve(response);
+        },
+        (error) => {
           console.log(error);
           commit("loginFailure");
           return Promise.reject(error);

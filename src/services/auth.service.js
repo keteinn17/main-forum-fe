@@ -1,5 +1,6 @@
 import axios from "axios";
-
+//import authHeader from "@/services/auth-header";
+import { loginByGoogle } from "@/api/userApi";
 const API_URL = "http://localhost:8082/api/v1/auth/";
 
 class AuthService {
@@ -9,22 +10,27 @@ class AuthService {
       password: user.password,
     });
     if (response.data) {
-      //console.log("Loginnnnnnn: ", JSON.stringify(response.data));
       localStorage.setItem("user", JSON.stringify(response.data.access_token));
       localStorage.setItem("role", JSON.stringify(response.data.role));
-      localStorage.setItem("account_type", JSON.stringify("UNKNOWN"));
-      console.log(localStorage.getItem("user"));
+      localStorage.setItem(
+        "account_type",
+        JSON.stringify(response.data.account_type)
+      );
     }
-
     return response.data;
   }
 
   async loginByGoogle() {
-    const response = await axios.get(API_URL + "login/google");
-    if (response) {
-      console.log("Login by google: ", response);
+    const response = await loginByGoogle();
+    if (response.data) {
+      localStorage.setItem("user", JSON.stringify(response.data.access_token));
+      localStorage.setItem("role", JSON.stringify(response.data.role));
+      localStorage.setItem(
+        "account_type",
+        JSON.stringify(response.data.account_type)
+      );
     }
-    return response;
+    return response.data;
   }
 
   logout() {
