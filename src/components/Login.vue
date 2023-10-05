@@ -130,22 +130,24 @@ export default {
       try {
         console.log("Handle the response", response);
         if (response) {
-          // const token = String(response.credential);
           console.log(this.googleAccessToken);
           localStorage.setItem("user", JSON.stringify(response.credential));
           console.log("set token to local storage: ", response.credential);
           this.loadingJWT = false;
+          var user;
           await loginByGoogle().then((res) => {
-            console.log(res);
-            localStorage.setItem("role", JSON.stringify(res.data.role));
+            user = res.data;
+            console.log(user);
+            localStorage.setItem("role", JSON.stringify(user.role));
             localStorage.setItem(
               "account_type",
-              JSON.stringify(res.data.account_type)
+              JSON.stringify(user.account_type)
             );
           });
+          this.$store.dispatch("auth/login", user);
           this.$router.push("/");
           console.log("Da qua day...");
-          window.location.href = "http://localhost:8081/";
+          //window.location.href = "http://localhost:8081/";
         }
       } catch (error) {
         this.loadingGg = false;

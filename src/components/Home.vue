@@ -84,6 +84,7 @@ export default {
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
+      console.log(123);
     }
     getAllcategory().then(
       (response) => {
