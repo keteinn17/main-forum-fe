@@ -23,6 +23,9 @@
               v-for="(topicLittle, index) in topic.topic"
               :key="index"
             >
+              <div class="centered-icon">
+                <i class="bx bx-message-rounded-minus"></i>
+              </div>
               <router-link
                 class="centered-title"
                 :to="{
@@ -42,6 +45,15 @@
     </div>
     <div class="custom-latest-posts">
       <h3 class="custom-latest-posts-heading">Latest posts</h3>
+      <div class="custom-lastest-posts-body">
+        <div
+          class="custom-latest-posts-body-content"
+          v-for="thread in latestThread"
+          :key="thread.threadsId"
+        >
+          {{ thread.title }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +61,7 @@
 <script>
 import { getAllcategory } from "@/api/categoryApi";
 import { getAllTopic } from "@/api/topicApi";
+import { getlatestThread } from "@/api/threadsApi";
 // eslint-disable-next-line no-unused-vars
 import { loginByGoogle } from "@/api/userApi";
 import Topic from "./Topic.vue";
@@ -64,7 +77,7 @@ export default {
       categoryId: [], // Your posts data
       topics: [],
       topicsInCategory: [],
-      latestPost: [], // Your latest posts data
+      latestThread: [], // Your latest posts data
       users: {}, // Your users data
       limitInc: 0, // Your limit increment value
       limit: 5, // Your limit value
@@ -75,7 +88,9 @@ export default {
       return this.$store.state.auth.user;
     },
   },
-  created() {},
+  created() {
+    this.getLatestThread();
+  },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
@@ -107,7 +122,7 @@ export default {
       console.log(userId);
     },
     async getAllTopic() {
-      getAllTopic().then(
+      await getAllTopic().then(
         (response) => {
           this.topics = response.data;
           console.log(this.topics);
@@ -124,6 +139,17 @@ export default {
             });
             console.log(this.topicsInCategory);
           });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async getLatestThread() {
+      await getlatestThread().then(
+        (res) => {
+          this.latestThread = res.data;
+          console.log(this.latestThread);
         },
         (error) => {
           console.log(error);
@@ -187,7 +213,7 @@ export default {
   text-align: left;
   justify-items: center;
   align-items: center;
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .custom-sidebar-list {
@@ -218,7 +244,8 @@ export default {
   background-color: #ebeced;
   padding: 6px 10px;
   margin-right: 1rem;
-  height: 100px;
+  height: 100%;
+  min-height: 200px;
 }
 
 .custom-latest-posts-heading {
@@ -263,11 +290,44 @@ h3 .custom-latest-posts-heading {
   justify-content: center;
   align-items: center;
   text-align: center;
+  color: #23497c;
+  font-weight: 600;
+}
+
+.centered-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ffba8c;
+  margin-left: 5px;
+  font-weight: 600;
 }
 
 .centered-title:hover {
   color: #ff6d25;
   font-weight: 600;
+}
+
+.bx {
+  font-size: 24px;
+  text-align: center;
+}
+
+.custom-lastest-posts-body {
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.custom-latest-posts-body-content {
+  min-width: 3rem;
+  height: auto;
+  color: #343a40;
+  max-height: 3rem;
+  overflow: hidden;
+  text-align: left;
 }
 
 /* Add any other CSS classes here with their respective styles */

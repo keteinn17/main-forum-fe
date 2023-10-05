@@ -13,3 +13,10 @@ export const getAllThreadsInTopic = (topicId) => {
     method: "get",
   });
 };
+
+export const getlatestThread = () => {
+  return request({
+    url: "threads/get_latest_thread",
+    method: "get",
+  });
+};

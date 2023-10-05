@@ -219,6 +219,9 @@ export default {
 .topic-link {
   margin-left: 20px;
   color: #264479;
+  max-width: 60%;
+  overflow: hidden;
+  max-height: 3rem;
 }
 .topic-link:hover {
   color: #ff6d25;
