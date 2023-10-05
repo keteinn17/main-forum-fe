@@ -13,7 +13,7 @@ export const getAllTopic = () => {
   });
 };
 
-export const getAllTopicById = (data) => {
+export const getTopicById = (data) => {
   return request({
     url: `/topic/${data}`,
     method: "get",

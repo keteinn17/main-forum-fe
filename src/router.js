@@ -5,6 +5,8 @@ import Profile from "./components/Profile.vue";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Topic from "./components/Topic";
+import Threads from "./components/Threads";
+import PostThreads from "./components/PostThreads";
 const routes = [
   {
     path: "/",
@@ -31,10 +33,20 @@ const routes = [
     component: Register,
   },
   {
-    path: "/topic/:topicId",
+    path: "/topic/:topicTitle.:topicId",
     name: "topic",
     component: Topic,
     props: true,
+  },
+  {
+    path: "/threads/:threadTitle.:threadId",
+    name: "threads",
+    component: Threads,
+  },
+  {
+    path: "/:topicTitle.:topicId/post-threads",
+    name: "postThreads",
+    component: PostThreads,
   },
 ];
 

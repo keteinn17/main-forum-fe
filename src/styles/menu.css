@@ -1,0 +1,204 @@
+@layer menu {
+    .nav, .menu {
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 0;
+        padding-right: 0;
+        margin: 0;
+        list-style: none
+    }
+    .menu {
+        flex-direction: column
+    }
+    .nav > .item > .link, .menu > .item > .link {
+        display: block;
+        padding: 0.675rem 1rem;
+        border-radius: calc( 0.75rem / 2);
+        color: #2f2f2f;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out
+    }
+    .nav > .item:hover > .link, .menu > .item:hover > .link {
+        background-color: #ededed
+    }
+    .nav > .item.active > .link, .menu > .item.active > .link {
+        background-color: #07f;
+        color: #fff;
+        cursor: default
+    }
+    .menu > .item > .link {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem
+    }
+    .nav.fill > .item {
+        flex: 1 1 auto;
+        text-align: center
+    }
+    .nav.pill {
+        flex-wrap: nowrap;
+        width: auto;
+        overflow-x: auto;
+        overflow-y: hidden
+    }
+    .nav.custom {
+        flex-wrap: nowrap;
+        width: auto;
+        overflow-x: auto;
+        overflow-y: hidden
+    }
+    .nav.custom > .item > .link {
+        border-radius: 0px
+    }
+    .menu.custom > .item > .link {
+        border-radius: 0px
+    }
+    .nav.custom > .item:not(.active):hover > .link {
+        box-shadow: inset 0px -3px #7d8ca4;
+        color: #363d46
+    }
+    html[dir=rtl] .nav.custom > .item:not(.active):hover > .link {
+        box-shadow: inset 0px -3px #7d8ca4
+    }
+    .nav.custom > .item.active > .link {
+        box-shadow: inset 0px -3px #07f;
+        background-color: #fff;
+        color: #07f
+    }
+    html[dir=rtl] .nav.custom > .item.active > .link {
+        box-shadow: inset 0px -3px #07f;
+        color: #07f
+    }
+    .menu.custom > .item:not(.active):hover > .link {
+        box-shadow: inset 3px 0px #7d8ca4;
+        color: #363d46
+    }
+    html[dir=rtl] .menu.custom > .item:not(.active):hover > .link {
+        box-shadow: inset -3px 0px #7d8ca4
+    }
+    .menu.custom > .item.active > .link {
+        box-shadow: inset 3px 0px #07f;
+        background-color: #fff;
+        color: #07f
+    }
+    html[dir=rtl] .menu.custom > .item.active > .link {
+        box-shadow: inset -3px 0px #07f
+    }
+    .nav.tab {
+        flex-wrap: nowrap;
+        width: auto;
+        border-bottom: 1px solid #dee2e6
+    }
+    .nav.tab > .item > .link {
+        border-radius: 0px;
+        border-top-left-radius: calc( 0.75rem / 2);
+        border-top-right-radius: calc( 0.75rem / 2);
+        background-color: transparent;
+        border: 1px solid transparent;
+        margin-bottom: -1px
+    }
+    .nav.tab > .item:not(.active):hover > .link {
+        background-color: #ededed
+    }
+    .nav.tab > .item.active > .link {
+        color: inherit;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 transparent
+    }
+    @media (prefers-color-scheme: dark) {
+        .nav > .item > .link, .menu > .item > .link {
+            color: inherit
+        }
+        .nav > .item:hover > .link, .menu > .item:hover > .link {
+            background-color: #5f5f5f
+        }
+        .nav.custom > .item:not(.active):hover > .link {
+            color: inherit
+        }
+        .nav.custom > .item.active > .link {
+            background-color: #2f2f2f
+        }
+        .menu.custom > .item:not(.active):hover > .link {
+            color: inherit
+        }
+        .menu.custom > .item.active > .link {
+            background-color: #2f2f2f
+        }
+        .nav.tab {
+            border-bottom-color: #5f5f5f
+        }
+        .nav.tab > .item:not(.active):hover > .link {
+            background-color: #5f5f5f
+        }
+        .nav.tab > .item.active > .link {
+            background-color: #2f2f2f;
+            border-color: #5f5f5f #5f5f5f transparent
+        }
+    }
+    @media (prefers-color-scheme: light) {
+        html[data-mode=dark] .nav > .item > .link, html[data-mode=dark] .menu > .item > .link {
+            color: inherit
+        }
+        html[data-mode=dark] .nav > .item:hover > .link, html[data-mode=dark] .menu > .item:hover > .link {
+            background-color: #5f5f5f
+        }
+        html[data-mode=dark] .nav.custom > .item:not(.active):hover > .link {
+            color: inherit
+        }
+        html[data-mode=dark] .nav.custom > .item.active > .link {
+            background-color: #2f2f2f
+        }
+        html[data-mode=dark] .menu.custom > .item:not(.active):hover > .link {
+            color: inherit
+        }
+        html[data-mode=dark] .menu.custom > .item.active > .link {
+            background-color: #2f2f2f
+        }
+        html[data-mode=dark] .nav.tab {
+            border-bottom-color: #5f5f5f
+        }
+        html[data-mode=dark] .nav.tab > .item:not(.active):hover > .link {
+            background-color: #5f5f5f
+        }
+        html[data-mode=dark] .nav.tab > .item.active > .link {
+            background-color: #2f2f2f;
+            border-color: #5f5f5f #5f5f5f transparent
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        html[data-mode=light] .nav > .item > .link, html[data-mode=light] .menu > .item > .link {
+            color: #2f2f2f
+        }
+        html[data-mode=light] .nav > .item:hover > .link, html[data-mode=light] .menu > .item:hover > .link {
+            background-color: #ededed
+        }
+        html[data-mode=light] .nav.custom > .item:not(.active):hover > .link {
+            color: #363d46
+        }
+        html[data-mode=light] .nav.custom > .item.active > .link {
+            background-color: #fff
+        }
+        html[data-mode=light] .menu.custom > .item:not(.active):hover > .link {
+            color: #363d46
+        }
+        html[data-mode=light] .menu.custom > .item.active > .link {
+            background-color: #fff
+        }
+        html[data-mode=light] .nav.tab {
+            border-bottom-color: #dee2e6
+        }
+        html[data-mode=light] .nav.tab > .item:not(.active):hover > .link {
+            background-color: #ededed
+        }
+        html[data-mode=light] .nav.tab > .item.active > .link {
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 transparent
+        }
+    }
+    @media print {
+        .nav, .menu {
+            display: none
+        }
+    }
+}

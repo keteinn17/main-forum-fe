@@ -87,7 +87,7 @@ export default {
       callback: (response) => {
         console.log("Login");
         console.log(response);
-        this.$router.push("/profile");
+        this.$router.push("/");
       },
       googleAccessToken: "",
       accountType: "",
@@ -100,7 +100,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/");
     }
   },
   methods: {
@@ -128,26 +128,14 @@ export default {
     async handleGoogleLogin(response) {
       this.loadingGg = true;
       try {
-        console.log("Handle the response", response);
         if (response) {
-          console.log(this.googleAccessToken);
           localStorage.setItem("user", JSON.stringify(response.credential));
-          console.log("set token to local storage: ", response.credential);
-          this.loadingJWT = false;
-          var user;
-          await loginByGoogle().then((res) => {
-            user = res.data;
-            console.log(user);
-            localStorage.setItem("role", JSON.stringify(user.role));
-            localStorage.setItem(
-              "account_type",
-              JSON.stringify(user.account_type)
-            );
+          this.loadingGg = false;
+          this.$store.dispatch("auth/login_google").then((res) => {
+            console.log(res);
+            this.$router.push("/");
           });
-          this.$store.dispatch("auth/login", user);
-          this.$router.push("/");
           console.log("Da qua day...");
-          //window.location.href = "http://localhost:8081/";
         }
       } catch (error) {
         this.loadingGg = false;
