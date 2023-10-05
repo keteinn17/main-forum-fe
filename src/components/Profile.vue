@@ -144,14 +144,14 @@
                     Cancel
                   </button>
                 </div>
-                <div
+                <!-- <div
                   v-if="errorMessage"
                   class="alert alert-danger"
                   role="alert"
                   :v-show="showError"
                 >
                   {{ errorMessage }}
-                </div>
+                </div> -->
               </div>
               <div class="tab-pane fade" id="account-change-password">
                 <div class="card-body pb-2">
@@ -201,14 +201,14 @@
                     Cancel
                   </button>
                 </div>
-                <div
+                <!-- <div
                   v-if="errorMessage"
                   class="alert alert-danger"
                   role="alert"
                   :v-show="showError"
                 >
                   {{ errorMessage }}
-                </div>
+                </div> -->
               </div>
               <div class="tab-pane fade" id="account-info">
                 <div class="card-body pb-2">
@@ -272,14 +272,14 @@
                     Cancel
                   </button>
                 </div>
-                <div
+                <!-- <div
                   v-if="errorMessage"
                   class="alert alert-danger"
                   role="alert"
                   :v-show="showError"
                 >
                   {{ errorMessage }}
-                </div>
+                </div> -->
               </div>
               <div class="tab-pane fade" id="account-social-links">
                 <div class="card-body pb-2">
@@ -433,11 +433,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="text-right mt-3">
-        <button type="button" class="btn btn-primary">Save changes</button
-        >&nbsp;
-        <button type="button" class="btn btn-default">Cancel</button>
-      </div> -->
     </div>
   </body>
 </template>
@@ -523,11 +518,26 @@ export default {
     },
   },
   methods: {
-    showToast() {
+    showErrorToast(message) {
       console.log("Da vao den day");
-      toast(this.errorMessage, {
+      toast.error(message, {
         autoClose: 1000,
       });
+      console.log("Da xong");
+    },
+    showSuccessToast(message) {
+      console.log("Da vao den day");
+      toast.success(message, {
+        autoClose: 1000,
+      });
+      console.log("Da xong");
+    },
+    showInfoToast(message) {
+      console.log("Da vao den day");
+      toast.info(message, {
+        autoClose: 1000,
+      });
+      console.log("Da xong");
     },
     setErrorMessage() {
       this.errorMessage = false;
@@ -555,6 +565,87 @@ export default {
         this.user.createAt = formattedDate;
       });
     },
+    async handleChangePassword() {
+      var check = this.checkChangePasswordRequest(event);
+      if (!check) return;
+      await changePassword(this.changePasswordRequest).then(
+        (res) => {
+          console.log(res);
+          this.showSuccessToast("Success change password");
+        },
+        (error) => {
+          this.loadingJWT = false;
+          this.errorMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.showErrorToast(this.errorMessage);
+        }
+      );
+    },
+    async handleUpdateProfile() {
+      if (!this.checkUpdateProfileRequest(event)) return;
+      await updateProfile(this.updateProfileRequest).then(
+        (res) => {
+          this.user = res.data;
+          this.showSuccessToast("Success update profile");
+        },
+        (error) => {
+          console.log("error");
+          this.errorMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          this.showErrorToast(this.errorMessage);
+        }
+      );
+    },
+    checkUpdateProfileRequest(event) {
+      event.preventDefault();
+      this.errorMessage = "";
+      if (
+        this.updateProfileRequest.aboutMe !== this.userAdditionalInfo.aboutMe
+      ) {
+        return true;
+      }
+      const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
+      if (!phoneRegex.test(this.updateProfileRequest.phone)) {
+        this.showError = true;
+        this.errorMessage = "Incorrect phone number";
+        this.showErrorToast(this.errorMessage);
+        return false;
+      }
+
+      if (this.updateProfileRequest.phone === this.userAdditionalInfo.phone) {
+        this.showInfoToast("Nothing to change");
+        return false;
+      }
+
+      if (
+        this.updateProfileRequest.firstName === "" ||
+        this.updateProfileRequest.lastName === ""
+      ) {
+        this.showError = false;
+        this.errorMessage = "First name or last name cannot be empty";
+        this.showErrorToast(this.errorMessage);
+        console.log("Da qua day");
+        return false;
+      }
+
+      if (
+        this.updateProfileRequest.firstName === this.user.firstName ||
+        this.updateProfileRequest.lastName === this.user.lastName
+      ) {
+        this.showInfoToast("Nothing to change");
+        return false;
+      }
+      this.errorMessage = "";
+      return true;
+    },
     checkChangePasswordRequest(event) {
       event.preventDefault();
       this.errorMessage = "";
@@ -566,7 +657,8 @@ export default {
         this.showError = true;
         this.errorMessage =
           "New password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be 8-20 characters long.";
-        this.showToast();
+        this.showErrorToast(this.errorMessage);
+        return false;
       }
 
       if (
@@ -575,47 +667,11 @@ export default {
       ) {
         this.showError = true;
         this.errorMessage = "New password and confirm new password must match.";
-        this.showToast();
+        this.showErrorToast(this.errorMessage);
         return false;
       }
       this.errorMessage = "";
       return true;
-    },
-    async handleChangePassword() {
-      var check = this.checkChangePasswordRequest(event);
-      if (!check) return;
-      await changePassword(this.changePasswordRequest).then(
-        (res) => {
-          console.log(res);
-        },
-        (error) => {
-          this.loadingJWT = false;
-          this.errorMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          this.showToast();
-        }
-      );
-    },
-    async handleUpdateProfile() {
-      if (!this.checkUpdateProfileRequest(event)) return;
-      await updateProfile(this.updateProfileRequest).then(
-        (res) => {
-          this.user = res.data;
-        },
-        (error) => {
-          console.log("error");
-          this.errorMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-        }
-      );
     },
     onCancelChangePassword() {
       this.showError = false;
@@ -633,31 +689,6 @@ export default {
       this.updateProfileRequest.phone = this.userAdditionalInfo.phone;
       this.updateProfileRequest.address = this.userAdditionalInfo.address;
       this.updateProfileRequest.aboutMe = this.userAdditionalInfo.aboutMe;
-    },
-    checkUpdateProfileRequest(event) {
-      event.preventDefault();
-      this.errorMessage = "";
-      const phoneRegex = new RegExp("(84|0[3|5|7|8|9])+([0-9]{8})");
-      if (!phoneRegex.test(this.updateProfileRequest.phone)) {
-        this.showError = true;
-        this.errorMessage = "Incorrect phone number";
-        return false;
-      }
-
-      if (
-        this.updateProfileRequest.firstName === "" ||
-        this.updateProfileRequest.lastName === ""
-      ) {
-        this.showError = false;
-        this.errorMessage = "First name or last name cannot be empty";
-        toast.error(this.message, {
-          autoClose: 3000,
-        });
-        console.log("Da qua day");
-        return false;
-      }
-      this.errorMessage = "";
-      return true;
     },
   },
 };

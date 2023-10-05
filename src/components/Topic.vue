@@ -3,7 +3,19 @@
     <div class="header-container">
       <div class="title">{{ topic.title }}</div>
       <div class="post">
-        <button class="post-btn">Post thread<i class="bx bxs-edit"></i></button>
+        <button class="post-btn">
+          <router-link
+            class="post-threads-btn"
+            :to="{
+              name: 'postThreads',
+              params: {
+                topicTitle: topic.titleNonDiacritics,
+                topicId: topic.topicId,
+              },
+            }"
+            >Post thread</router-link
+          ><i class="bx bxs-edit"></i>
+        </button>
       </div>
     </div>
     <div class="content-container">
@@ -22,7 +34,19 @@
               v-for="thread in threadsList"
               :key="thread.threadsId"
             >
-              {{ thread.content }}
+              <router-link
+                class="topic-link"
+                :to="{
+                  name: 'threads',
+                  params: {
+                    threadTitle: thread.titleNonDiacritics,
+                    threadId: thread.threadsId,
+                  },
+                }"
+              >
+                {{ thread.title }}
+              </router-link>
+              <!-- {{ thread.content }} -->
             </div>
           </div>
         </div>
@@ -167,7 +191,7 @@ export default {
   /* height: 100%; */
   background: #ebeced;
   border: 1px solid;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 .block-filter-bar {
@@ -191,6 +215,21 @@ export default {
   text-align: center;
   align-items: center;
   border-bottom: 1px solid #5c7099;
+}
+.topic-link {
+  margin-left: 20px;
+  color: #264479;
+}
+.topic-link:hover {
+  color: #ff6d25;
+  font-weight: 600;
+}
+.post-threads-btn {
+  outline: none;
+  list-style: none;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 @media (max-width: 1000px) {

@@ -28,22 +28,18 @@
               v-for="(topicLittle, index) in topic.topic"
               :key="index"
             >
-              <table>
-                <tr>
-                  <td>
-                    <router-link
-                      :to="{
-                        name: 'topic',
-                        params: { topicId: topicLittle.topicId },
-                      }"
-                    >
-                      {{ topicLittle.title }}
-
-                      <!-- {{ topicLittle.title }} -->
-                    </router-link>
-                  </td>
-                </tr>
-              </table>
+              <router-link
+                class="centered-title"
+                :to="{
+                  name: 'topic',
+                  params: {
+                    topicId: topicLittle.topicId,
+                    topicTitle: topicLittle.titleNonDiacritics,
+                  },
+                }"
+              >
+                {{ topicLittle.title }}
+              </router-link>
             </div>
           </div>
         </div>
@@ -187,12 +183,15 @@ export default {
   font-size: 21px;
   font-weight: medium;
   background-color: #5c7099;
-  padding: 6px 10px;
   border: 2px;
   /* border-radius: 5px; */
-  max-height: 3rem;
+  display: flex;
+  min-height: 3rem;
   margin-bottom: 0;
   text-align: left;
+  justify-items: center;
+  align-items: center;
+  padding-left: 20px;
 }
 
 .custom-sidebar-list {
@@ -255,9 +254,24 @@ h3 .custom-latest-posts-heading {
   margin-bottom: 1rem;
 }
 .column-in-topic {
-  height: 3rem;
+  height: auto;
+  min-height: 3rem;
   text-align: center;
-  border-bottom: 1px solid #23497c;
+  border-bottom: 1px solid #5c7099;
+  align-content: center;
+  display: flex;
+}
+.centered-title {
+  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.centered-title:hover {
+  color: #ff6d25;
+  font-weight: 600;
 }
 
 /* Add any other CSS classes here with their respective styles */
