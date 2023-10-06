@@ -115,8 +115,8 @@ export default {
   /* width: 60%; */
   min-height: 1000px;
   margin-top: 7rem;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 .navbar-in-forum-container {
   width: 100%;

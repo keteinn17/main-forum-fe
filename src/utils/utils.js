@@ -15,3 +15,27 @@ export default function formatDate(dateString) {
   // Return the formatted date string in the "MM/dd/yyyy" format
   return `${formattedMonth}/${formattedDay}/${formattedYear}`;
 }
+
+export function formatDateTime(dateTimeString) {
+  const dateTime = new Date(dateTimeString);
+  const options = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  };
+  const today = new Date();
+  var formatDateTime = "";
+  const timeOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  const timeString = dateTime.toLocaleTimeString("en-US", timeOptions);
+  if (dateTime.toDateString() === today.toDateString()) {
+    formatDateTime = `Today at ${timeString}`;
+  } else {
+    formatDateTime =
+      dateTime.toLocaleString("en-US", options) + ` at ${timeString}`;
+  }
+  return formatDateTime;
+}

@@ -20,3 +20,10 @@ export const getlatestThread = () => {
     method: "get",
   });
 };
+
+export const getlatestThreadInTopic = () => {
+  return request({
+    url: "threads/get_latest_thread_in_topic",
+    method: "get",
+  });
+};

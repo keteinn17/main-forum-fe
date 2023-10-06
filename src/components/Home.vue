@@ -38,22 +38,90 @@
               >
                 {{ topicLittle.title }}
               </router-link>
+              <div class="topic-info">
+                <div class="number-threads">
+                  <div class="number-threads-content">Threads</div>
+                  <div class="number">{{ topicLittle.numberOfThreads }}</div>
+                </div>
+                <div class="number-message">
+                  <div class="number-threads-content">Message</div>
+                  <div class="number">{{ topicLittle.numberOfComments }}</div>
+                </div>
+              </div>
+              <div class="latest-thread-in-topic">
+                <div
+                  v-for="thread in latestThreadInTopic"
+                  :key="thread.threadsId"
+                >
+                  <div
+                    class="latest-thread-in-topic-title"
+                    v-if="thread.topicId === topicLittle.topicId"
+                  >
+                    <router-link
+                      class="threads-link-latest-in-topic"
+                      :to="{
+                        name: 'threads',
+                        params: {
+                          threadTitle: thread.titleNonDiacritics,
+                          threadId: thread.threadsId,
+                        },
+                      }"
+                    >
+                      {{ thread.title }}
+                    </router-link>
+                    <div class="user-time-created">
+                      {{ formatDateTime(thread.createAt) }} .
+                      {{ thread.username }}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="custom-latest-posts">
-      <h3 class="custom-latest-posts-heading">Latest posts</h3>
-      <div class="custom-lastest-posts-body">
-        <div
-          class="custom-latest-posts-body-content"
-          v-for="thread in latestThread"
-          :key="thread.threadsId"
-        >
-          {{ thread.title }}
+    <div class="right-bar">
+      <div class="custom-latest-posts">
+        <h3 class="custom-latest-posts-heading">Latest posts</h3>
+        <div class="custom-lastest-posts-body">
+          <div
+            class="custom-latest-posts-body-content"
+            v-for="thread in latestThread"
+            :key="thread.threadsId"
+          >
+            <router-link
+              class="threads-link"
+              :to="{
+                name: 'threads',
+                params: {
+                  threadTitle: thread.titleNonDiacritics,
+                  threadId: thread.threadsId,
+                },
+              }"
+            >
+              {{ thread.title }}
+            </router-link>
+            <div class="user-time-created">
+              Latest: {{ thread.username }} .
+              {{ formatDateTime(thread.createAt) }}
+            </div>
+            <router-link
+              class="topic-link"
+              :to="{
+                name: 'topic',
+                params: {
+                  topicId: thread.topicId,
+                  topicTitle: thread.topicTitleNonDiacritics,
+                },
+              }"
+            >
+              {{ thread.topicTitle }}
+            </router-link>
+          </div>
         </div>
       </div>
+      <div class="forum-statistic"></div>
     </div>
   </div>
 </template>
@@ -61,7 +129,7 @@
 <script>
 import { getAllcategory } from "@/api/categoryApi";
 import { getAllTopic } from "@/api/topicApi";
-import { getlatestThread } from "@/api/threadsApi";
+import { getlatestThread, getlatestThreadInTopic } from "@/api/threadsApi";
 // eslint-disable-next-line no-unused-vars
 import { loginByGoogle } from "@/api/userApi";
 import Topic from "./Topic.vue";
@@ -77,7 +145,8 @@ export default {
       categoryId: [], // Your posts data
       topics: [],
       topicsInCategory: [],
-      latestThread: [], // Your latest posts data
+      latestThread: [],
+      latestThreadInTopic: [], // Your latest posts data
       users: {}, // Your users data
       limitInc: 0, // Your limit increment value
       limit: 5, // Your limit value
@@ -90,6 +159,7 @@ export default {
   },
   created() {
     this.getLatestThread();
+    this.getlatestThreadInTopic();
   },
   mounted() {
     if (!this.currentUser) {
@@ -156,11 +226,46 @@ export default {
         }
       );
     },
+
+    async getlatestThreadInTopic(topicId) {
+      await getlatestThreadInTopic(topicId).then(
+        (res) => {
+          this.latestThreadInTopic = res.data;
+          console.log(this.latestThreadInTopic);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    formatDateTime(dateTimeString) {
+      const dateTime = new Date(dateTimeString);
+      const options = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      };
+      const today = new Date();
+      var formatDateTime = "";
+      const timeOptions = {
+        hour: "numeric",
+        minute: "numeric",
+      };
+      const timeString = dateTime.toLocaleTimeString("en-US", timeOptions);
+      if (dateTime.toDateString() === today.toDateString()) {
+        formatDateTime = `Today at ${timeString}`;
+      } else {
+        formatDateTime =
+          dateTime.toLocaleString("en-US", options) + ` at ${timeString}`;
+      }
+      return formatDateTime;
+    },
   },
 };
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css?family=Be+Vietnam+Pro");
 .custom-header {
   align-items: center;
   height: 33px;
@@ -189,6 +294,7 @@ export default {
   display: flex;
   padding: 10px 0 24px 16px;
   gap: 16px;
+  font-family: "Be Vietnam Pro", sans-serif;
   background-color: #343a40 !important;
 }
 
@@ -237,11 +343,24 @@ export default {
 }
 
 .custom-latest-posts {
-  flex: 1;
   color: #ebeced;
   font-size: 21px;
   font-weight: medium;
   background-color: #ebeced;
+  padding: 6px 10px;
+  margin-right: 1rem;
+  height: 100%;
+  min-height: 200px;
+  border-radius: 10px;
+  max-width: 20rem;
+}
+
+.right-bar {
+  flex: 1;
+  color: #ebeced;
+  font-size: 21px;
+  font-weight: medium;
+  /* background-color: #ebeced; */
   padding: 6px 10px;
   margin-right: 1rem;
   height: 100%;
@@ -287,18 +406,19 @@ h3 .custom-latest-posts-heading {
 .centered-title {
   margin-left: 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
   text-align: center;
   color: #23497c;
   font-weight: 600;
+  min-width: 50%;
+  max-width: 50%;
 }
 
 .centered-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
+  text-align: left;
   color: #ffba8c;
   margin-left: 5px;
   font-weight: 600;
@@ -324,10 +444,102 @@ h3 .custom-latest-posts-heading {
 .custom-latest-posts-body-content {
   min-width: 3rem;
   height: auto;
+  min-height: 3rem;
   color: #343a40;
-  max-height: 3rem;
-  overflow: hidden;
+  /* max-height: 5rem; */
   text-align: left;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.topic-info {
+  width: 20%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+}
+
+.number-threads {
+  min-height: 3rem;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.number-threads-content {
+  font-size: 12.8px;
+  color: #8f9193;
+}
+
+.number-message {
+  min-height: 3rem;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.number {
+  font-size: 16px;
+}
+
+.threads-link {
+  font-size: 16px;
+  max-width: 100%;
+}
+.threads-link:hover {
+  color: #ff6d25;
+  font-weight: 600;
+}
+
+.topic-link {
+  font-size: 14px;
+  color: #8f9193;
+}
+.topic-link:hover {
+  text-decoration: solid;
+}
+
+.user-time-created {
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: #8f9193;
+}
+
+.latest-thread-in-topic {
+  width: 100%;
+  height: auto;
+  margin-left: 15px;
+  max-width: 15rem;
+}
+
+.forum-statistic {
+  height: 200px;
+  width: 100%;
+  background: #23497c;
+  padding: 6px 10px;
+  margin-right: 1rem;
+}
+
+.latest-thread-in-topic-title {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.threads-link-latest-in-topic {
+  font-size: 14px;
+  max-width: 100%;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Add any other CSS classes here with their respective styles */
